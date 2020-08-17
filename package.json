@@ -1,0 +1,8 @@
+{
+  "name": "provindevs-2020frontend",
+  "version": "0.1.0",
+  "repository": "https://github.com/ProvinDevs/2020frontend.git",
+  "author": "shun-shobon <shun.shobon@gmail.com>",
+  "license": "MIT",
+  "private": true
+}
