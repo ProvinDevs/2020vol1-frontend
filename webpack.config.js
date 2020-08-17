@@ -1,4 +1,5 @@
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const isEnvProduction = process.env.NODE_ENV === "production";
 
@@ -25,4 +26,11 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      inject: true,
+      minify: isEnvProduction,
+      template: path.join(__dirname, "public", "index.html"),
+    }),
+  ],
 };
