@@ -4,5 +4,8 @@
   "repository": "https://github.com/ProvinDevs/2020frontend.git",
   "author": "shun-shobon <shun.shobon@gmail.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "typescript": "^3.9.7"
+  }
 }
