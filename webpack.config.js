@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const isEnvProduction = process.env.NODE_ENV === "production";
 
@@ -31,6 +32,18 @@ module.exports = {
       inject: true,
       minify: isEnvProduction,
       template: path.join(__dirname, "public", "index.html"),
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.join(__dirname, "public"),
+          globOptions: {
+            ignore: [
+              "index.html"
+            ],
+          },
+        },
+      ],
     }),
   ],
 };
