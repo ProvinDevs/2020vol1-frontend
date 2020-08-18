@@ -25,6 +25,15 @@ module.exports = {
           "ts-loader",
         ],
       },
+      {
+        test: /\.(png|jpg|gif)$/,
+        loader: "url-loader",
+        options: {
+          limit: 8192,
+          fallback: "file-loader",
+          name: "image/[name].[contenthash:8].[ext]",
+        },
+      }
     ],
   },
   plugins: [
