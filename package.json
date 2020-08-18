@@ -8,7 +8,9 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
     "clean": "rimraf dist",
-    "dev": "webpack-dev-server"
+    "dev": "webpack-dev-server",
+    "eslint": "eslint --ignore-path .gitignore 'src/**/*.{ts,tsx}'",
+    "eslint:fix": "yarn eslint --fix"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
