@@ -1,3 +1,4 @@
+/* eslint-disable */
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -11,7 +12,7 @@ module.exports = {
     publicPath: "/",
     path: path.join(__dirname, "dist"),
     filename: "js/[name].[contenthash:8].js",
-},
+  },
   resolve: {
     extensions: [".js", ".jsx", ".ts", ".tsx"],
   },
@@ -20,10 +21,11 @@ module.exports = {
       {
         test: /\.tsx?$/,
         exclude: /node_modules/,
-        use: [
-          "babel-loader",
-          "ts-loader",
-        ],
+        use: ["babel-loader", "ts-loader"],
+      },
+      {
+        test: /\.scss$/,
+        use: ["style-loader", "css-loader?modules", "sass-loader"],
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -33,7 +35,7 @@ module.exports = {
           fallback: "file-loader",
           name: "image/[name].[contenthash:8].[ext]",
         },
-      }
+      },
     ],
   },
   plugins: [
@@ -47,9 +49,7 @@ module.exports = {
         {
           from: path.join(__dirname, "public"),
           globOptions: {
-            ignore: [
-              "index.html"
-            ],
+            ignore: ["index.html"],
           },
         },
       ],
