@@ -6,6 +6,8 @@ import HomePage from "./pages/Home";
 import AboutPage from "./pages/About";
 import { theme } from "./theme";
 
+import "./scss/global.scss";
+
 const App: FC = () => (
   <BrowserRouter>
     <ThemeProvider theme={theme}>
