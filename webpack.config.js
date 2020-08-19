@@ -26,6 +26,29 @@ module.exports = {
         ],
       },
       {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: "style-loader",
+          },
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              implementation: require("sass"),
+              sassOptions: {
+                fiber: require("fibers"),
+              },
+            },
+          },
+        ],
+      },
+      {
         test: /\.(png|jpg|gif)$/,
         loader: "url-loader",
         options: {
