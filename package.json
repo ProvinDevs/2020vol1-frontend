@@ -6,11 +6,13 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack",
+    "build": "run-s build:*",
+    "build:webpack": "cross-env NODE_ENV=production webpack",
+    "build:scss": "tsm 'src/**/*.scss'",
+    "dev": "run-p dev:*",
+    "dev:webpack": "webpack-dev-server",
+    "dev:scss": "yarn build:scss --watch",
     "clean": "rimraf dist",
-    "start": "run-p dev scss",
-    "dev": "webpack-dev-server",
-    "scss": "npx tsm src --watch",
     "eslint": "eslint --ignore-path .gitignore 'src/**/*.{ts,tsx}'",
     "eslint:fix": "yarn eslint --fix"
   },
