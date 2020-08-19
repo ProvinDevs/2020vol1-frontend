@@ -13,5 +13,10 @@ declare module "*.gif" {
   export default src;
 }
 
-declare var THREE;
-declare var THREEx: any;
+declare module "*.scss" {
+  const classes: { readonly [key: string]: string };
+  export default classes;
+}
+
+declare let THREE;
+declare let THREEx: any;
