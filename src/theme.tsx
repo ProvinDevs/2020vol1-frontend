@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from "react";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { createMuiTheme, ThemeProvider, CssBaseline } from "@material-ui/core";
 
 import styles from "./scss/theme.scss";
 
@@ -31,9 +31,13 @@ type ChildrenType = {
 };
 
 const PageWrapper: FC<ChildrenType> = ({ children }: ChildrenType) => (
-  <ThemeProvider theme={theme}>
-    <div className={styles.pageWrapper}>{children}</div>
-  </ThemeProvider>
+  <>
+    <span id="back-to-top-anchor"></span>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div className={styles.pageWrapper}>{children}</div>
+    </ThemeProvider>
+  </>
 );
 
 export default PageWrapper;
