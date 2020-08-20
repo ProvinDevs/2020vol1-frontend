@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
 import { createMuiTheme, ThemeProvider, CssBaseline } from "@material-ui/core";
 
 import styles from "./scss/theme.scss";
@@ -26,11 +26,7 @@ const theme = createMuiTheme({
   },
 });
 
-type ChildrenType = {
-  children: ReactNode;
-};
-
-const PageWrapper: FC<ChildrenType> = ({ children }: ChildrenType) => (
+const PageWrapper: FC = ({ children }) => (
   <>
     <span id="back-to-top-anchor"></span>
     <ThemeProvider theme={theme}>

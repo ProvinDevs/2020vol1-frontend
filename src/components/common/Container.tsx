@@ -1,11 +1,7 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
 import { Container, Box, Zoom, useScrollTrigger, Fab } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { KeyboardArrowUp } from "@material-ui/icons";
-
-type Props = {
-  children: ReactNode;
-};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,7 +22,7 @@ const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
   }
 };
 
-const ScrollTop: FC<Props> = ({ children }: Props) => {
+const ScrollTop: FC = ({ children }) => {
   const classes = useStyles();
 
   const trigger = useScrollTrigger({
@@ -43,7 +39,7 @@ const ScrollTop: FC<Props> = ({ children }: Props) => {
   );
 };
 
-const PageContainer: FC<Props> = ({ children }: Props) => (
+const PageContainer: FC = ({ children }) => (
   <>
     <Container>
       <Box>{children}</Box>
