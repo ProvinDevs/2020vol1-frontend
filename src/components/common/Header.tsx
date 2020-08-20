@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Button } from "@material-ui/core";
+import { Button, Toolbar, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 import styles from "../../scss/components/common/header.scss";
@@ -10,11 +10,12 @@ export type HeaderProps = {
 };
 
 const Header: FC<HeaderProps> = ({ role, href }: HeaderProps) => (
-  <div className={styles.headerWrapper}>
+  <Toolbar className={styles.header}>
+    <Typography variant="h6">2.5次元黒板</Typography>
     <Button color="primary" component={Link} to={href}>
       {role}の方
     </Button>
-  </div>
+  </Toolbar>
 );
 
 export default Header;
