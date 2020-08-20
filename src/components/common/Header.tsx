@@ -9,7 +9,7 @@ export type HeaderProps = {
   href: string;
 };
 
-const Header: FC<HeaderProps> = ({ role, href }: HeaderProps) => (
+const Header: FC<HeaderProps> = ({ role, href }) => (
   <Toolbar className={styles.header}>
     <h2>2.5次元黒板</h2>
     <Button variant="outlined" color="primary" component={Link} to={href}>
