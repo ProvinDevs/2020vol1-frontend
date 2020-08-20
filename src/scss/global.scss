@@ -15,21 +15,21 @@
     BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", Arial, "ＭＳ Ｐゴシック", "MS PGothic";
   box-sizing: border-box;
-  color: map.get(color.$text, "main");
 }
 
 html {
   overflow-wrap: break-word;
   word-wrap: break-word;
   font-size: 16px;
+  color: map.get(color.$text, "main");
+}
+
+body {
+  margin: 0;
 }
 
 a {
   display: inline-block;
   text-decoration: none;
   color: map.get(color.$primary, "main");
-  &:hover {
-    color: map.get(color.$primary, "light");
-    text-decoration: underline;
-  }
 }
