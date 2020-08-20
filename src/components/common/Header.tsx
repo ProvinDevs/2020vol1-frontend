@@ -11,7 +11,7 @@ export type HeaderProps = {
 
 const Header: FC<HeaderProps> = ({ role, href }: HeaderProps) => (
   <Toolbar className={styles.header}>
-    <h3>2.5次元黒板</h3>
+    <h2>2.5次元黒板</h2>
     <Button color="primary" component={Link} to={href}>
       {role}の方
     </Button>
