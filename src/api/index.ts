@@ -9,6 +9,10 @@ export interface ApiClient {
   getClassByPassphrase(pass: string): Promise<model.Class | undefined>;
 
   newClass(name: string): Promise<model.Class>;
+
+  /**
+   * @deprecated Class.delete を使おう！
+   */
   deleteClass(id: model.ClassID): Promise<model.Class>;
 
   /**
@@ -25,4 +29,9 @@ export interface ApiClient {
     fileName: string,
     createdAt: Moment,
   ): Promise<model.File>;
+
+  /**
+   * @deprecated Class.deleteFile を使おう!
+   */
+  deleteFile(fileId: model.FileID): Promise<model.File>;
 }
