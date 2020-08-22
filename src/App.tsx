@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import HomePage from "./pages/Home";
 import AboutPage from "./pages/About";
 import TeacherHomePage from "./pages/TeacherHome";
+import ClassPage from "./pages/student/Class";
 import Footer from "./components/common/Footer";
 import PageWrapper from "./theme";
 
@@ -20,6 +21,7 @@ const App: FC = () => (
         <Route exact path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />
         <Route exact path="/teacher" component={TeacherHomePage} />
+        <Route path="/student/class" component={ClassPage} />
       </Switch>
       <Footer />
     </PageWrapper>
