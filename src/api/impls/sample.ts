@@ -71,6 +71,7 @@ export class SampleApiClient implements ApiClient {
     }
 
     // ゆるして
+    // eslint-disable-next-line
     (_class as any)._name = newName;
   }
 
