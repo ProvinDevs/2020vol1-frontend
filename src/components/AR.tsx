@@ -1,4 +1,6 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
+
+import styles from "../scss/components/ar.scss";
 
 const AR: FC = () => {
   let renderer: THREE.WebGLRenderer;
@@ -9,9 +11,9 @@ const AR: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let arToolkitContext: any;
 
-  const onResize = (wrapper: HTMLDivElement) => {
-    const { clientWidth, clientHeight } = wrapper;
-    renderer.setSize(clientWidth, clientHeight);
+  const onResize = () => {
+    const { innerWidth, innerHeight } = window;
+    renderer.setSize(innerWidth, innerHeight);
     arToolkitSource.onResizeElement();
     arToolkitSource.copyElementSizeTo(renderer.domElement);
     if (arToolkitContext.arController !== null) {
@@ -53,8 +55,7 @@ const AR: FC = () => {
 
     arToolkitSource.init(() => {
       wrapper.appendChild(arToolkitSource.domElement);
-      arToolkitSource.domElement.removeAttribute("style");
-      setTimeout(() => onResize(wrapper), 2000);
+      setTimeout(onResize, 2000);
     });
 
     arToolkitContext.init(() => {
@@ -77,7 +78,12 @@ const AR: FC = () => {
     animate();
   };
 
-  return <div ref={init} />;
+  useEffect(() => {
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  return <div className={styles.ar} ref={init} />;
 };
 
 export default AR;
