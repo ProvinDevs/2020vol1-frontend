@@ -22,7 +22,6 @@ export class SampleApiClient implements ApiClient {
       new Class("英語", "this is eigo" as ClassID, "P3vF2", [], this),
     ];
   }
-
   async getAllClassInfo(): Promise<Array<SimpleClassInfo>> {
     const data: Array<SimpleClassInfo> = this.inner.map((t) => {
       return {
@@ -53,12 +52,26 @@ export class SampleApiClient implements ApiClient {
     return _class;
   }
 
-  deleteClass(id: ClassID): Promise<Class> {
-    throw new Error("Method not implemented.");
+  async deleteClass(id: ClassID): Promise<Class> {
+    const _class = this.inner.find((x) => x.id === id);
+
+    if (_class == null) {
+      throw Error("target class not found");
+    }
+
+    this.inner = this.inner.filter((x) => x.id !== id);
+    return _class;
   }
 
-  renameClass(id: ClassID, newName: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async renameClass(id: ClassID, newName: string): Promise<void> {
+    const _class = this.inner.find((x) => x.id == id);
+
+    if (_class == null) {
+      throw Error("target class not found");
+    }
+
+    // ゆるして
+    (_class as any)._name = newName;
   }
 
   async addNewFile(
@@ -67,7 +80,7 @@ export class SampleApiClient implements ApiClient {
     fileName: string,
     createdAt: Moment,
   ): Promise<File> {
-    const elm = this.inner.find((x) => x.id == classId);
+    const elm = this.inner.find((x) => x.id === classId);
 
     if (elm == null) {
       throw Error("target class not found");
@@ -85,5 +98,21 @@ export class SampleApiClient implements ApiClient {
 
     elm.files.push(file);
     return cloneDeep(file);
+  }
+
+  async deleteFile(fileId: FileID): Promise<File> {
+    const elm = this.inner.find((x) => x.files.find((y) => y.id === fileId) != null);
+
+    if (elm == null) {
+      throw Error("target file not found");
+    }
+
+    // ゆるしてほしい
+    // eslint-disable-next-line
+    const file = elm.files.find((x) => x.id == fileId)!;
+    // eslint-disable-next-line
+    (elm as any)._files = elm.files.filter((x) => x.id !== fileId);
+
+    return file;
   }
 }
