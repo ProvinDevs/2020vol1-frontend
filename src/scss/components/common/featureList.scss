@@ -1,16 +1,13 @@
+/*phone*/
 .box {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
+  margin: auto;
 }
-.box:nth-child(odd) {
-  flex-direction: row-reverse;
-}
-
 .text {
-  width: 450px;
+  width: auto;
   height: auto;
-  padding: 30px;
+  padding: 5px;
+  text-align: center;
 }
 
 .title {
@@ -22,9 +19,37 @@
 }
 
 .pict {
-  width: 450px;
+  width: auto;
   img {
     width: 100%;
     height: auto;
+  }
+}
+
+/*PC ipad*/
+@media (min-width: 768px) {
+  .box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .box:nth-child(odd) {
+    flex-direction: row-reverse;
+  }
+  .text {
+    width: 450px;
+    height: auto;
+    padding: 30px;
+  }
+
+  .title {
+    font-size: 40px;
+  }
+  .explanation {
+    font-size: 20px;
+  }
+
+  .pict {
+    width: 450px;
   }
 }
