@@ -22,6 +22,7 @@ export class SampleApiClient implements ApiClient {
       new Class("英語", "this is eigo" as ClassID, "P3vF2", [], this),
     ];
   }
+
   async getAllClassInfo(): Promise<Array<SimpleClassInfo>> {
     const data: Array<SimpleClassInfo> = this.inner.map((t) => {
       return {
