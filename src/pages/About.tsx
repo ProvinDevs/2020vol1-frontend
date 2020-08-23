@@ -2,6 +2,12 @@ import React, { FC } from "react";
 import FeatureList, { Feature } from "../components/common/list";
 import styles from "../scss/pages/about.scss";
 import PageContainer from "../components/common/Container";
+import Header, { HeaderProps } from "../components/common/Header";
+
+const headerProps: HeaderProps = {
+  role: "生徒",
+  href: "/",
+};
 
 const About: FC = () => {
   const Features: Feature[] = [
@@ -28,6 +34,13 @@ const About: FC = () => {
 
   return (
     <>
+      <Header {...headerProps} />
+      <div className={styles.head}>
+        <h1>Webで資料を黒板の中に展開</h1>
+        <p className={styles.SubHeading}>
+          ARのマーカーを黒板に貼り付けて、カメラを通して見ることで資料を映しだせます。
+        </p>
+      </div>
       <PageContainer>
         <FeatureList Features={Features} />
       </PageContainer>
