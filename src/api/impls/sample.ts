@@ -2,8 +2,6 @@ import { ApiClient, SimpleClassInfo, ClassID, Class, ArMarkerID, FileID, File } 
 import { Moment } from "moment";
 import cloneDeep from "lodash/cloneDeep";
 
-type Exact<Origin, Refer> = Origin extends Refer ? (Refer extends Origin ? Origin : never) : never;
-
 async function toHash(text: string): Promise<string> {
   const encoded = new TextEncoder().encode(text);
   const digest = await crypto.subtle.digest("SHA-256", encoded);
@@ -89,14 +87,16 @@ export class SampleApiClient implements ApiClient {
     }
 
     const fileId = await toHash(`${arMarkerId}${fileName}${createdAt}`);
-    const file: File = {
-      id: fileId as FileID,
-      markerID: arMarkerId as ArMarkerID,
-      resourceInfo: {
+
+    // prettier-ignore
+    const file = new File(
+      fileId as FileID,
+      arMarkerId as ArMarkerID,
+      {
         fileName,
         createdAt,
-      },
-    };
+      }
+    );
 
     elm.files.push(file);
     return cloneDeep(file);

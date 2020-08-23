@@ -1,37 +1,37 @@
-import * as model from "./model";
+import { SimpleClassInfo, Class, ClassID, File, FileID } from "./model";
 export * from "./model";
 
 import { Moment } from "moment";
 
 export interface ApiClient {
-  getAllClassInfo(): Promise<Array<model.SimpleClassInfo>>;
-  getClassById(id: model.ClassID): Promise<model.Class | undefined>;
-  getClassByPassphrase(pass: string): Promise<model.Class | undefined>;
+  getAllClassInfo(): Promise<Array<SimpleClassInfo>>;
+  getClassById(id: ClassID): Promise<Class | undefined>;
+  getClassByPassphrase(pass: string): Promise<Class | undefined>;
 
-  newClass(name: string): Promise<model.Class>;
+  newClass(name: string): Promise<Class>;
 
   /**
    * @deprecated Class.delete を使おう！
    */
-  deleteClass(id: model.ClassID): Promise<model.Class>;
+  deleteClass(id: ClassID): Promise<Class>;
 
   /**
    * @deprecated Class.rename を使おう！
    */
-  renameClass(id: model.ClassID, newName: string): Promise<void>;
+  renameClass(id: ClassID, newName: string): Promise<void>;
 
   /**
    * @deprecated Class.addNewFile を使おう！
    */
   addNewFile(
-    classId: model.ClassID,
+    classId: ClassID,
     arMarkerId: string,
     fileName: string,
     createdAt: Moment,
-  ): Promise<model.File>;
+  ): Promise<File>;
 
   /**
    * @deprecated Class.deleteFile を使おう!
    */
-  deleteFile(fileId: model.FileID): Promise<model.File>;
+  deleteFile(fileId: FileID): Promise<File>;
 }

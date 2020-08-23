@@ -10,16 +10,27 @@ export type FileID = string & { [__FileID]: never };
 declare const __ArMarkerID: unique symbol;
 export type ArMarkerID = string & { [__ArMarkerID]: never };
 
-export type ResourceInfo = {
-  readonly fileName: string;
-  readonly createdAt: Moment;
-};
+export class ResourceInfo {
+  /**
+   * @deprecated Fileから取得してね
+   */
+  // prettier-ignore
+  constructor(
+    public readonly fileName: string,
+    public readonly createdAt: Moment
+  ) {}
+}
 
-export type File = {
-  readonly id: FileID;
-  readonly markerID: ArMarkerID;
-  readonly resourceInfo: ResourceInfo;
-};
+export class File {
+  /**
+   * @deprecated Classから取得してね
+   */
+  constructor(
+    public readonly id: FileID,
+    public readonly markerID: ArMarkerID,
+    public readonly resourceInfo: ResourceInfo,
+  ) {}
+}
 
 export class Class {
   // 本当はpackage privateにしてApiClientにしかnewできないようにしたかったけど
