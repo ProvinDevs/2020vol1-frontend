@@ -1,0 +1,8 @@
+.joinForm {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  &Button {
+    margin: 2% 0;
+  }
+}
