@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent } from "@material-ui/core";
+import { Card, CardContent, Typography } from "@material-ui/core";
 import { File } from "../../api";
 
 interface Props {
@@ -8,10 +8,14 @@ interface Props {
 
 const FileCard = (props: Props): JSX.Element => {
   return (
-    <Card>
+    <Card style={{ margin: "1%" }}>
       <CardContent>
-        <h3>{props.file.resourceInfo.fileName}</h3>
-        <p>作成日時: {props.file.resourceInfo.createdAt}</p>
+        <Typography variant="h5" component="h3">
+          {props.file.resourceInfo.fileName}
+        </Typography>
+        <Typography variant="body2" component="p">
+          作成日時: {props.file.resourceInfo.createdAt.toString()}
+        </Typography>
       </CardContent>
     </Card>
   );
