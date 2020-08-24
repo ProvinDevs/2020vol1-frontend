@@ -6,7 +6,7 @@ const isEnvProduction = process.env.NODE_ENV === "production";
 
 module.exports = {
   mode: isEnvProduction ? "production" : "development",
-  entry: ["@babel/polyfill", path.join(__dirname, "src", "index.tsx")],
+  entry: path.join(__dirname, "src", "index.tsx"),
   output: {
     publicPath: "/",
     path: path.join(__dirname, "dist"),
