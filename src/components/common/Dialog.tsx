@@ -10,9 +10,9 @@ import {
 
 export type DialogProps = {
   title: string;
-  agree: string;
+  agreeText: string;
   isOpen: boolean;
-  handleClose: (disagree: boolean) => void;
+  handleClose: (isAgreed: boolean) => void;
 };
 
 const Dialog: FC<DialogProps> = (props) => {
@@ -30,16 +30,15 @@ const Dialog: FC<DialogProps> = (props) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
       open={props.isOpen}
-      onClose={props.handleClose}
     >
       <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
       {Content}
       <DialogActions>
-        <Button onClick={() => props.handleClose(true)} color="primary" autoFocus>
+        <Button onClick={() => props.handleClose(false)} color="primary" autoFocus>
           キャンセル
         </Button>
-        <Button onClick={() => props.handleClose(false)} color="primary">
-          {props.agree}
+        <Button onClick={() => props.handleClose(true)} color="primary">
+          {props.agreeText}
         </Button>
       </DialogActions>
     </DialogWrapper>

@@ -30,51 +30,59 @@ export type ClassFormProps = {
 const checkBlankSpace = (value: string) => /\S/g.test(value);
 
 const JoinClass: FC<JoinClassProps> = ({ api }) => {
-  const [passPhrase, setPassPhrase] = useState("");
-  const [passPhraseState, setMatchState] = useState({ noError: false, first: true });
-  const [className, setClassName] = useState("");
+  const [state, setState] = useState({
+    passPhraseState: { noError: false, first: true },
+    passPhrase: "",
+    className: "",
+  });
 
   const resetState = (isFirst = false) => {
-    setPassPhrase("");
-    setMatchState({ noError: false, first: isFirst });
-    setClassName("");
+    setState({
+      passPhraseState: { noError: false, first: isFirst },
+      passPhrase: "",
+      className: "",
+    });
   };
 
   const setEditContents = (element: TextAreaElement) => {
     const value = element.target.value;
     const passPhraseValue = checkBlankSpace(value) ? value : "";
-    setPassPhrase(passPhraseValue);
+    setState({ ...state, passPhrase: passPhraseValue });
   };
 
   const clickJoinButton = async () => {
-    const getClass = await api.getClassByPassphrase(passPhrase);
+    const getClass = await api.getClassByPassphrase(state.passPhrase);
     if (getClass === undefined) {
       resetState();
       return;
     }
-    setClassName(getClass.name);
-    setMatchState({ noError: true, first: false });
+    setState({
+      ...state,
+      passPhraseState: { noError: true, first: false },
+      className: getClass.name,
+    });
   };
 
-  const handleClose = (disagree: boolean) => {
-    if (disagree) {
+  const handleClose = (isAgreed: boolean) => {
+    if (!isAgreed) {
       resetState(true);
       return;
     }
     window.location.href = "/";
   };
 
+  const passPhraseState = state.passPhraseState;
   const classFormPropsValue: ClassFormProps = {
-    passPhrase: passPhrase,
+    passPhrase: state.passPhrase,
     passPhraseState: passPhraseState.first ? passPhraseState.first : passPhraseState.noError,
     setEditContents: setEditContents,
     clickJoinButton: clickJoinButton,
   };
 
   const DialogPropsValue: DialogProps = {
-    title: `${className}に参加しますか`,
-    agree: "参加",
-    isOpen: passPhraseState.noError,
+    title: `${state.className}に参加しますか`,
+    agreeText: "参加",
+    isOpen: state.passPhraseState.noError,
     handleClose: handleClose,
   };
 
