@@ -18,6 +18,11 @@ class GCS {
       gzip: true,
     });
   }
+
+  public async deleteFile(file: File): Promise<File> {
+    await this.bucket.file(file.id).delete();
+    return file;
+  }
 }
 
 export default GCS;
