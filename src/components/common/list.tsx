@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import styles from "../../scss/components/common/featureList.scss";
 
 export interface Feature {
-  id: number;
   title: string;
   image: string;
   explanation: string;
