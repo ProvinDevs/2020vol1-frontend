@@ -8,11 +8,11 @@ export interface Feature {
   explanation: string;
 }
 
-interface FreatureListProps {
+interface FeatureListProps {
   Features: Feature[];
 }
 
-const FreatureList: FC<FreatureListProps> = ({ Features }) => (
+const FeatureList: FC<FeatureListProps> = ({ Features }) => (
   <>
     {Features.map((c) => (
       <div className={styles.box} key={c.id}>
@@ -28,4 +28,4 @@ const FreatureList: FC<FreatureListProps> = ({ Features }) => (
   </>
 );
 
-export default FreatureList;
+export default FeatureList;
