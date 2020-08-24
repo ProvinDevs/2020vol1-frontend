@@ -36,6 +36,7 @@ const AR: FC = () => {
       antialias: true,
     });
     renderer.setClearColor(new THREE.Color(), 0);
+    renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.domElement.style.position = "absolute";
     renderer.domElement.style.top = "0";
