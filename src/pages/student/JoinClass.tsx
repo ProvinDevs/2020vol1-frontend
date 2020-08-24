@@ -4,6 +4,7 @@ import { Container } from "@material-ui/core";
 import Header, { HeaderProps } from "../../components/common/Header";
 import PageContainer from "../../components/common/Container";
 import JoinClassForm from "../../components/JoinClassForm";
+import Dialog, { DialogProps } from "../../components/common/Dialog";
 import { ApiClient } from "../../api";
 
 import styles from "../../scss/pages/student/joinClass.scss";
@@ -29,30 +30,60 @@ export type ClassFormProps = {
 const checkBlankSpace = (value: string) => /\S/g.test(value);
 
 const JoinClass: FC<JoinClassProps> = ({ api }) => {
-  const [passPhrase, setPassPhrase] = useState("");
-  const [passPhraseState, setMatchState] = useState(true);
+  const [state, setState] = useState({
+    passPhraseState: { noError: false, first: true },
+    passPhrase: "",
+    className: "",
+  });
+
+  const resetState = (isFirst = false) => {
+    setState({
+      passPhraseState: { noError: false, first: isFirst },
+      passPhrase: "",
+      className: "",
+    });
+  };
 
   const setEditContents = (element: TextAreaElement) => {
     const value = element.target.value;
     const passPhraseValue = checkBlankSpace(value) ? value : "";
-    setPassPhrase(passPhraseValue);
+    setState({ ...state, passPhrase: passPhraseValue });
   };
 
   const clickJoinButton = async () => {
-    const getClass = await api.getClassByPassphrase(passPhrase);
+    const getClass = await api.getClassByPassphrase(state.passPhrase);
     if (getClass === undefined) {
-      setPassPhrase("");
-      setMatchState(false);
+      resetState();
       return;
     }
-    console.log(getClass);
+    setState({
+      ...state,
+      passPhraseState: { noError: true, first: false },
+      className: getClass.name,
+    });
   };
 
+  const handleClose = (isAgreed: boolean) => {
+    if (!isAgreed) {
+      resetState(true);
+      return;
+    }
+    window.location.href = "/";
+  };
+
+  const passPhraseState = state.passPhraseState;
   const classFormPropsValue: ClassFormProps = {
-    passPhrase: passPhrase,
-    passPhraseState: passPhraseState,
+    passPhrase: state.passPhrase,
+    passPhraseState: passPhraseState.first ? passPhraseState.first : passPhraseState.noError,
     setEditContents: setEditContents,
     clickJoinButton: clickJoinButton,
+  };
+
+  const DialogPropsValue: DialogProps = {
+    title: `${state.className}に参加しますか`,
+    agreeText: "参加",
+    isOpen: state.passPhraseState.noError,
+    handleClose: handleClose,
   };
 
   return (
@@ -64,6 +95,7 @@ const JoinClass: FC<JoinClassProps> = ({ api }) => {
           <JoinClassForm {...classFormPropsValue} />
         </Container>
       </PageContainer>
+      <Dialog {...DialogPropsValue}></Dialog>
     </>
   );
 };
