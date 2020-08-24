@@ -1,11 +1,14 @@
-import React, { Component, ReactNode } from "react";
+import React, { FC, Component, ReactNode } from "react";
+import { TableBody, TableCell, TableRow, Paper, Typography } from "@material-ui/core";
+
 import { ApiClient, SimpleClassInfo } from "../../api";
+import Header, { HeaderProps } from "../../components/common/Header";
+import { TableWrapper, TableHead } from "../../components/common/Table";
+import PageContainer from "../../components/common/Container";
 
 export type ClassListProps = {
   api: ApiClient;
 };
-
-import PageContainer from "../../components/common/Container";
 
 type State =
   | {
@@ -15,6 +18,13 @@ type State =
       apiState: "Loaded";
       data: Array<SimpleClassInfo>;
     };
+
+const headerProps: HeaderProps = {
+  role: "生徒",
+  href: "/about",
+};
+
+const columns = ["Name", "ID", "Pass"];
 
 export default class ClassList extends Component<ClassListProps, State> {
   constructor(props: ClassListProps) {
@@ -46,18 +56,29 @@ export default class ClassList extends Component<ClassListProps, State> {
 
         case "Loaded":
           return (
-            <>
+            <TableBody>
               {this.state.data.map((info, index) => (
                 <ClassCard info={info} key={index} />
               ))}
-            </>
+            </TableBody>
           );
       }
     })();
 
     return (
       <>
-        <PageContainer>{body}</PageContainer>
+        <Header {...headerProps} />
+        <PageContainer>
+          <Typography gutterBottom variant="h5" component="h2" align="center">
+            授業一覧
+          </Typography>
+          <Paper>
+            <TableWrapper>
+              <TableHead columns={columns} />
+              {body}
+            </TableWrapper>
+          </Paper>
+        </PageContainer>
       </>
     );
   }
@@ -67,20 +88,10 @@ type ClassCardProp = {
   info: SimpleClassInfo;
 };
 
-function ClassCard(prop: ClassCardProp): JSX.Element {
-  return (
-    <>
-      <table>
-        <tr>
-          <td>name: {prop.info.name}</td>
-        </tr>
-        <tr>
-          <td>id: {prop.info.id}</td>
-        </tr>
-        <tr>
-          <td>pass: {prop.info.passPhrase}</td>
-        </tr>
-      </table>
-    </>
-  );
-}
+const ClassCard: FC<ClassCardProp> = (prop) => (
+  <TableRow>
+    <TableCell>{prop.info.name}</TableCell>
+    <TableCell>{prop.info.id}</TableCell>
+    <TableCell>{prop.info.passPhrase}</TableCell>
+  </TableRow>
+);
