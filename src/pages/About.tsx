@@ -4,6 +4,9 @@ import styles from "../scss/pages/about.scss";
 import PageContainer from "../components/common/Container";
 import Header, { HeaderProps } from "../components/common/Header";
 import { Container } from "@material-ui/core";
+import ARImage from "../images/ar_image.png";
+import DocumentImage from "../images/document_image.png";
+import SampleImage from "../images/sample.png";
 
 const headerProps: HeaderProps = {
   role: "生徒",
@@ -15,20 +18,20 @@ const About: FC = () => {
     {
       id: 1,
       title: "導入の負担が少ない",
-      image: "../image/ar_image.png",
+      image: ARImage,
       explanation:
         "2.5次元黒板はスマホとARマーカーで完結するため、新たに機材の導入の必要がありません。",
     },
     {
       id: 2,
       title: "かさばらない",
-      image: "../image/document_image.png",
+      image: DocumentImage,
       explanation: "大きな資料を保管する必要がありません。ARマーカーは同じものを使用できます。",
     },
     {
       id: 3,
       title: "サンプル",
-      image: "../image/sample.png",
+      image: SampleImage,
       explanation: "動画、3Dに対応するならそれをいれたいなと思っている。",
     },
   ];
