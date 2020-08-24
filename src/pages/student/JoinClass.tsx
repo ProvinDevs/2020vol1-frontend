@@ -39,11 +39,13 @@ const JoinClass: FC<JoinClassProps> = ({ api }) => {
   };
 
   const clickJoinButton = async () => {
-    const getPassPhrase = await api.getClassByPassphrase(passPhrase);
-    if (getPassPhrase === undefined) {
+    const getClass = await api.getClassByPassphrase(passPhrase);
+    if (getClass === undefined) {
       setPassPhrase("");
       setMatchState(false);
+      return;
     }
+    console.log(getClass);
   };
 
   const classFormPropsValue: ClassFormProps = {
