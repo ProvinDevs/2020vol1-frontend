@@ -1,15 +1,17 @@
+@use "../color";
+@use "sass:map";
+
 .head {
   width: 100%;
   height: auto;
   text-align: center;
-  background: #1da1f2;
-  .SubHeading {
-    font-size: 20px;
-    color: #ffffff;
+  background: map.get(color.$primary, "dark");
+  .Heading {
+    font-size: 2.75rem;
+    color: map.get(color.$primary, "darkboard-text");
   }
-}
-
-h1 {
-  font-size: 55px;
-  color: #ffffff;
+  .subHeading {
+    font-size: 1rem;
+    color: map.get(color.$primary, "darkboard-text");
+  }
 }

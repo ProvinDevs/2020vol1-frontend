@@ -21,7 +21,7 @@ const FreatureList: FC<FreatureListProps> = ({ Features }) => (
           <p className={styles.explanation}>{c.explanation}</p>
         </div>
         <div className={styles.pict}>
-          <img src={`${c.image}`} alt="" />
+          <img src={`${c.image}`} alt={`${c.title}のイメージ`} />
         </div>
       </div>
     ))}

@@ -3,6 +3,7 @@ import FeatureList, { Feature } from "../components/common/list";
 import styles from "../scss/pages/about.scss";
 import PageContainer from "../components/common/Container";
 import Header, { HeaderProps } from "../components/common/Header";
+import { Container } from "@material-ui/core";
 
 const headerProps: HeaderProps = {
   role: "生徒",
@@ -35,12 +36,12 @@ const About: FC = () => {
   return (
     <>
       <Header {...headerProps} />
-      <div className={styles.head}>
-        <h1>Webで資料を黒板の中に展開</h1>
-        <p className={styles.SubHeading}>
+      <Container className={styles.head}>
+        <h1 className={styles.Heading}>Webで資料を黒板の中に展開</h1>
+        <p className={styles.subHeading}>
           ARのマーカーを黒板に貼り付けて、カメラを通して見ることで資料を映しだせます。
         </p>
-      </div>
+      </Container>
       <PageContainer>
         <FeatureList Features={Features} />
       </PageContainer>

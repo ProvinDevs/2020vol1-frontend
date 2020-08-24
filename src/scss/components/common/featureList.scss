@@ -1,52 +1,46 @@
-/*phone*/
-.box {
-  flex-direction: column;
-  margin: auto;
-}
+@use "../../color";
+@use "../../mediaqueries";
+@use "sass:map";
+
+//phone
 .text {
-  width: auto;
-  height: auto;
   padding: 5px;
-  text-align: center;
 }
 
 .title {
-  font-size: 40px;
-  color: #0000ff;
+  font-size: 2rem;
+  color: map.get(color.$primary, "dark");
 }
 .explanation {
-  font-size: 20px;
+  font-size: 1rem;
 }
 
 .pict {
-  width: auto;
   img {
     width: 100%;
-    height: auto;
   }
 }
 
-/*PC ipad*/
-@media (min-width: 768px) {
+//PC Tablet
+@include mediaqueries.pc {
   .box {
     display: flex;
     flex-direction: row;
     justify-content: center;
-  }
-  .box:nth-child(odd) {
-    flex-direction: row-reverse;
+    &:nth-child(odd) {
+      flex-direction: row-reverse;
+    }
   }
   .text {
     width: 500px;
-    height: auto;
     padding: 30px;
   }
 
   .title {
-    font-size: 40px;
+    font-size: 2.5rem;
   }
   .explanation {
-    font-size: 20px;
+    font-size: 1.25rem;
   }
 
   .pict {
