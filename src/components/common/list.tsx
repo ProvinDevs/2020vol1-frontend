@@ -14,8 +14,8 @@ interface FeatureListProps {
 
 const FeatureList: FC<FeatureListProps> = ({ Features }) => (
   <>
-    {Features.map((c) => (
-      <div className={styles.box} key={c.id}>
+    {Features.map((c, index) => (
+      <div className={styles.box} key={index}>
         <div className={styles.text}>
           <h3 className={styles.title}>{c.title}</h3>
           <p className={styles.explanation}>{c.explanation}</p>
