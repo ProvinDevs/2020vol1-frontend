@@ -2,12 +2,17 @@ import React, { FC, useState, ChangeEvent } from "react";
 import { TextField, Button, Container } from "@material-ui/core";
 import Header, { HeaderProps } from "../../components/common/Header";
 import PageContainer from "../../components/common/Container";
+import { ApiClient } from "../../api";
 
 import styles from "../../scss/pages/student/joinClass.scss";
 
 const headerProps: HeaderProps = {
   role: "教師",
   href: "/about",
+};
+
+type JoinClassProps = {
+  api: ApiClient;
 };
 
 type TextAreaElement = ChangeEvent<HTMLTextAreaElement>;
@@ -26,7 +31,6 @@ const JoinClassForm: FC<ClassFormProps> = ({ passPhrase, setEditContents }) => (
       autoFocus
       fullWidth
       margin="normal"
-      id="passPhrase"
       label="授業コード"
       onChange={setEditContents}
     />
@@ -45,15 +49,13 @@ const JoinClassForm: FC<ClassFormProps> = ({ passPhrase, setEditContents }) => (
   </>
 );
 
-const JoinClass: FC = () => {
+const JoinClass: FC<JoinClassProps> = ({ api }) => {
   const [passPhrase, setPassPhrase] = useState("");
 
   const setEditContents = (element: TextAreaElement) => {
     const value = element.target.value;
-    if (!checkBlankSpace(value)) {
-      return;
-    }
-    setPassPhrase(value);
+    const passPhraseValue = checkBlankSpace(value) ? value : "";
+    setPassPhrase(passPhraseValue);
   };
 
   return (
