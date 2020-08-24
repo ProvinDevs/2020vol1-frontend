@@ -1,4 +1,5 @@
 import { Storage, Bucket } from "@google-cloud/storage";
+import { File } from "../api";
 import token from "./token.json";
 
 // ***†卍 ハードコーディング 卍†***
@@ -9,6 +10,13 @@ class GCS {
 
   constructor(bucketName: string = BUCKET_NAME) {
     this.bucket = new Storage({ credentials: token }).bucket(bucketName);
+  }
+
+  public async addNewFile(file: File, fileSrc: string): Promise<void> {
+    await this.bucket.upload(fileSrc, {
+      destination: file.id,
+      gzip: true,
+    });
   }
 }
 
