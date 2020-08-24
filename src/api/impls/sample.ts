@@ -15,9 +15,9 @@ export class SampleApiClient implements ApiClient {
 
   constructor() {
     this.inner = [
-      new Class("理科", "this is rika" as ClassID, "5J2cG", [], this),
-      new Class("社会", "this is syakai" as ClassID, "T4na9", [], this),
-      new Class("英語", "this is eigo" as ClassID, "P3vF2", [], this),
+      new Class("理科", "thisIsRika" as ClassID, "5J2cG", [], this),
+      new Class("社会", "thisIsSyakai" as ClassID, "T4na9", [], this),
+      new Class("英語", "thisIsEigo" as ClassID, "P3vF2", [], this),
     ];
   }
 
