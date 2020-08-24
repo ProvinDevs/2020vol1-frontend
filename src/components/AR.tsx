@@ -1,4 +1,5 @@
 import React, { FC, useEffect } from "react";
+import { getMarker } from "../markers";
 import { File } from "../api";
 
 import styles from "../scss/components/ar.scss";
@@ -7,7 +8,6 @@ type Props = {
   files: Array<File>;
 };
 
-// TODO: 現在未使用引数。後で使用すること。
 const AR: FC<Props> = ({ files }) => {
   let renderer: THREE.WebGLRenderer;
   let scene: THREE.Scene;
@@ -74,17 +74,22 @@ const AR: FC<Props> = ({ files }) => {
       camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
     });
 
-    const markerRoot = new THREE.Group();
-    scene.add(markerRoot);
-    const mesh = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshNormalMaterial({ opacity: 0.5 }),
-    );
-    mesh.position.y += 0.5;
-    markerRoot.add(mesh);
-    new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
-      type: "pattern",
-      patternUrl: THREEx.ArToolkitContext.baseURL + "../data/data/patt.hiro",
+    const textureLoader = new THREE.TextureLoader();
+    files.map((file) => {
+      const texture = textureLoader.load(/* GCSのURL */ file.id);
+      const markerRoot = new THREE.Group();
+      scene.add(markerRoot);
+      const geometry = new THREE.PlaneGeometry(1, 1);
+      const material = new THREE.MeshPhongMaterial({ map: texture });
+      const mesh = new THREE.Mesh(geometry, material);
+      markerRoot.add(mesh);
+
+      const markerUrl = getMarker(file);
+      if (markerUrl == null) return;
+      return new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+        type: "pattern",
+        patterUrl: markerUrl,
+      });
     });
 
     animate();
