@@ -25,7 +25,7 @@ export default class ClassList extends Component<ClassListProps, State> {
     };
   }
 
-  componentDidUpdate(): void {
+  componentDidMount(): void {
     this.props.api
       .getAllClassInfo()
       .then((info) => this.setState({ apiState: "Loaded", data: info }))
