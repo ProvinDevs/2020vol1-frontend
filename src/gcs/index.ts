@@ -8,7 +8,7 @@ const BUCKET_NAME = "provindevs-2020-files";
 class GCS {
   private bucket: Bucket;
 
-  constructor(bucketName: string = BUCKET_NAME) {
+  constructor(private bucketName: string = BUCKET_NAME) {
     this.bucket = new Storage({ credentials: token }).bucket(bucketName);
   }
 
@@ -23,6 +23,12 @@ class GCS {
   public async deleteFile(file: File): Promise<File> {
     await this.bucket.file(file.id).delete();
     return file;
+  }
+
+  public async getFileUrl(file: File): Promise<string | undefined> {
+    if (await this.bucket.file(file.id).exists()) {
+      return `https://storage.googleapis.com/${this.bucketName}/${file.id}`;
+    }
   }
 }
 
