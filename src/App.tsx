@@ -21,7 +21,11 @@ const App: FC = () => (
         <Route exact path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />
         <Route exact path="/teacher" component={TeacherHomePage} />
-        <Route path="/teacher/class/:id" component={() => <ClassEditPage client={apiClient} />} />
+        <Route
+          exact
+          path="/teacher/class/:id"
+          component={() => <ClassEditPage client={apiClient} />}
+        />
       </Switch>
       <Footer />
     </PageWrapper>

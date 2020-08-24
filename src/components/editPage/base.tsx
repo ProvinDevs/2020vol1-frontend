@@ -34,7 +34,12 @@ const ClassEditBase = (props: Props): JSX.Element => {
     return <h1>Loading...</h1>;
   }
 
-  return <h1>{state.data?.name}</h1>;
+  return (
+    <>
+      <h1>{state.data?.name}</h1>
+      <a href="./newfile">新規ファイル</a>
+    </>
+  );
 };
 
 export default ClassEditBase;
