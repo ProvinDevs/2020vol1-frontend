@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import HomePage from "./pages/Home";
 import AboutPage from "./pages/About";
 import JoinClass from "./pages/student/JoinClass";
+import Footer from "./components/common/Footer";
 import PageWrapper from "./theme";
 
 import "./scss/global.scss";
@@ -16,6 +17,7 @@ const App: FC = () => (
         <Route path="/about" component={AboutPage} />
         <Route path="/join" component={JoinClass} />
       </Switch>
+      <Footer />
     </PageWrapper>
   </BrowserRouter>
 );
