@@ -17,6 +17,7 @@ class GCS {
       destination: file.id,
       gzip: true,
     });
+    await this.bucket.file(file.id).makePublic();
   }
 
   public async deleteFile(file: File): Promise<File> {
