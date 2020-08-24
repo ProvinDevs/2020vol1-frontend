@@ -37,7 +37,7 @@ const About: FC = () => {
     <>
       <Header {...headerProps} />
       <Container className={styles.head}>
-        <h1 className={styles.Heading}>Webで資料を黒板の中に展開</h1>
+        <h1 className={styles.heading}>Webで資料を黒板の中に展開</h1>
         <p className={styles.subHeading}>
           ARのマーカーを黒板に貼り付けて、カメラを通して見ることで資料を映しだせます。
         </p>
