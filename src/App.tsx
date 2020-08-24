@@ -1,10 +1,10 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 import HomePage from "./pages/Home";
 import AboutPage from "./pages/About";
-import ClassList from "./pages/ClassList";
-import TeacherHomePage from "./pages/TeacherHome";
+import ClassList from "./pages/teacher/ClassList";
+import TeacherHomePage from "./pages/teacher/TeacherHome";
 import Footer from "./components/common/Footer";
 import PageWrapper from "./theme";
 

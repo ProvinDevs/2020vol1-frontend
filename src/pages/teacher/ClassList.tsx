@@ -1,11 +1,11 @@
 import React, { Component, ReactNode } from "react";
-import { ApiClient, SimpleClassInfo } from "../api";
+import { ApiClient, SimpleClassInfo } from "../../api";
 
 export type ClassListProps = {
   api: ApiClient;
 };
 
-import PageContainer from "../components/common/Container";
+import PageContainer from "../../components/common/Container";
 
 type State =
   | {
