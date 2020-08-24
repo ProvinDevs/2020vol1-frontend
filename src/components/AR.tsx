@@ -30,6 +30,7 @@ const AR: FC = () => {
   };
 
   const init = (wrapper: HTMLDivElement) => {
+    const { innerWidth, innerHeight } = window;
     renderer = new THREE.WebGLRenderer({
       alpha: true,
       antialias: true,
@@ -47,6 +48,10 @@ const AR: FC = () => {
 
     arToolkitSource = new THREEx.ArToolkitSource({
       sourceType: "webcam",
+      sourceWidth: innerWidth,
+      sourceHeight: innerHeight,
+      displayWidth: innerWidth,
+      displayHeight: innerHeight,
     });
 
     arToolkitContext = new THREEx.ArToolkitContext({
