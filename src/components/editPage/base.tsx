@@ -7,7 +7,7 @@ interface Props {
   id: string;
 }
 
-interface State {
+export interface classEditState {
   // hasData switch to true, when api completed and successed job.
   hasData: boolean;
   hasError: boolean;
@@ -15,46 +15,8 @@ interface State {
   data: Class | undefined;
 }
 
-type classEditAction = fileDeleteAction | onDeleteButtonPushedAction;
-
-interface onDeleteButtonPushedAction {
-  actionType: "onDeleteButtonPushed";
-  id: string;
-}
-
-interface fileDeleteAction {
-  actionType: "fileDelete";
-  file: File;
-}
-
-const reducer = (prevState: State, action: classEditAction): State => {
-  switch (action.actionType) {
-    case "onDeleteButtonPushed": {
-      if (prevState.deletingFile != null) {
-        return prevState;
-      }
-      const newState = Object.assign({}, prevState);
-      newState.deletingFile = action.id as FileID;
-
-      prevState.data
-        ?.deleteFile(action.id as FileID)
-        .then((file) => reducer(newState, { actionType: "fileDelete", file }));
-
-      return newState;
-    }
-    case "fileDelete": {
-      return {
-        ...prevState,
-        deletingFile: undefined,
-      };
-    }
-    default:
-      return prevState;
-  }
-};
-
 const ClassEditBase = (props: Props): JSX.Element => {
-  const [state, setState] = React.useState<State>({
+  const [state, setState] = React.useState<classEditState>({
     hasData: false,
     hasError: false,
     deletingFile: undefined,
@@ -67,8 +29,9 @@ const ClassEditBase = (props: Props): JSX.Element => {
     props.client.getClassById(props.id as ClassID).then((foundClass) => {
       const hasError = foundClass == null;
       setState({
-        hasData: !hasError,
+        ...state,
         hasError: hasError,
+        hasData: !hasError,
         data: foundClass,
       });
     });
@@ -80,7 +43,7 @@ const ClassEditBase = (props: Props): JSX.Element => {
       <h1>{state.data?.name}</h1>
       <a href="./newfile">新規ファイル</a>
       {state.data?.files.map((file, index) => (
-        <FileCard file={file} key={index} />
+        <FileCard file={file} key={index} setState={setState} state={state} />
       ))}
     </>
   );
