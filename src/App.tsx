@@ -7,7 +7,11 @@ import TeacherHomePage from "./pages/TeacherHome";
 import Footer from "./components/common/Footer";
 import PageWrapper from "./theme";
 
+import { SampleApiClient } from "./api/impls/sample";
+
 import "./scss/global.scss";
+
+const apiClient = new SampleApiClient();
 
 const App: FC = () => (
   <BrowserRouter>
