@@ -1,7 +1,9 @@
 import React, { FC, useState, ChangeEvent } from "react";
-import { TextField, Button, Container } from "@material-ui/core";
+import { Container } from "@material-ui/core";
+
 import Header, { HeaderProps } from "../../components/common/Header";
 import PageContainer from "../../components/common/Container";
+import JoinClassForm from "../../components/JoinClassForm";
 import { ApiClient } from "../../api";
 
 import styles from "../../scss/pages/student/joinClass.scss";
@@ -11,51 +13,44 @@ const headerProps: HeaderProps = {
   href: "/about",
 };
 
+type TextAreaElement = ChangeEvent<HTMLTextAreaElement>;
+
 type JoinClassProps = {
   api: ApiClient;
 };
 
-type TextAreaElement = ChangeEvent<HTMLTextAreaElement>;
-
-type ClassFormProps = {
-  passPhrase: boolean;
+export type ClassFormProps = {
+  passPhrase: string;
+  passPhraseState: boolean;
   setEditContents: (element: TextAreaElement) => void;
+  clickJoinButton: () => void;
 };
 
 const checkBlankSpace = (value: string) => /\S/g.test(value);
 
-const JoinClassForm: FC<ClassFormProps> = ({ passPhrase, setEditContents }) => (
-  <>
-    <TextField
-      required
-      autoFocus
-      fullWidth
-      margin="normal"
-      label="授業コード"
-      onChange={setEditContents}
-    />
-    <div className={styles.joinFormButton}>
-      <Button
-        fullWidth
-        size="large"
-        color="primary"
-        variant="contained"
-        id="send"
-        disabled={passPhrase}
-      >
-        参加する
-      </Button>
-    </div>
-  </>
-);
-
 const JoinClass: FC<JoinClassProps> = ({ api }) => {
   const [passPhrase, setPassPhrase] = useState("");
+  const [passPhraseState, setMatchState] = useState(true);
 
   const setEditContents = (element: TextAreaElement) => {
     const value = element.target.value;
     const passPhraseValue = checkBlankSpace(value) ? value : "";
     setPassPhrase(passPhraseValue);
+  };
+
+  const clickJoinButton = async () => {
+    const getPassPhrase = await api.getClassByPassphrase(passPhrase);
+    if (getPassPhrase === undefined) {
+      setPassPhrase("");
+      setMatchState(false);
+    }
+  };
+
+  const classFormPropsValue: ClassFormProps = {
+    passPhrase: passPhrase,
+    passPhraseState: passPhraseState,
+    setEditContents: setEditContents,
+    clickJoinButton: clickJoinButton,
   };
 
   return (
@@ -64,7 +59,7 @@ const JoinClass: FC<JoinClassProps> = ({ api }) => {
       <PageContainer>
         <Container maxWidth="xs" className={styles.joinForm}>
           <h1>授業に参加する</h1>
-          <JoinClassForm passPhrase={passPhrase == ""} setEditContents={setEditContents} />
+          <JoinClassForm {...classFormPropsValue} />
         </Container>
       </PageContainer>
     </>
