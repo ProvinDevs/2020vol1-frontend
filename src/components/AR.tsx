@@ -89,7 +89,7 @@ const AR: FC<Props> = ({ files }) => {
       if (markerUrl == null) return;
       return new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
         type: "pattern",
-        patterUrl: markerUrl,
+        patternUrl: markerUrl,
       });
     });
 
