@@ -1,5 +1,8 @@
 import React from "react";
-import { ApiClient, Class, ClassID, File, FileID } from "../../api";
+import { GridList, Button } from "@material-ui/core";
+import { Add } from "@material-ui/icons";
+
+import { ApiClient, Class, ClassID, FileID } from "../../api";
 import FileCard from "./fileCard";
 
 interface Props {
@@ -41,10 +44,14 @@ const ClassEditBase = (props: Props): JSX.Element => {
   return (
     <>
       <h1>{state.data?.name}</h1>
-      <a href="./newfile">新規ファイル</a>
-      {state.data?.files.map((file, index) => (
-        <FileCard file={file} key={index} setState={setState} state={state} />
-      ))}
+      <Button href="./newfile" startIcon={<Add />} color="primary">
+        新規ファイル
+      </Button>
+      <GridList spacing={4}>
+        {state.data?.files.map((file, index) => (
+          <FileCard file={file} key={index} setState={setState} state={state} />
+        ))}
+      </GridList>
     </>
   );
 };
