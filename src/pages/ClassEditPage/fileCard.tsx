@@ -10,6 +10,8 @@ interface Props {
 }
 
 const FileCard = (props: Props): JSX.Element => {
+  const date = props.file.resourceInfo.createdAt.format("YYYY年MM月DD日 HH:mm:ss");
+
   return (
     <Card style={{ margin: "1%" }}>
       <CardContent>
@@ -17,7 +19,7 @@ const FileCard = (props: Props): JSX.Element => {
           {props.file.resourceInfo.fileName}
         </Typography>
         <Typography variant="body2" component="p">
-          作成日時: {props.file.resourceInfo.createdAt.toString()}
+          作成日時: {date}
         </Typography>
         <CardActions>
           <Button

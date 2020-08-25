@@ -1,10 +1,10 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import Header, { HeaderProps } from "../components/common/Header";
-import PageContainer from "../components/common/Container";
-import { ApiClient } from "../api";
-import ClassEditBase from "../components/editPage/base";
+import Header, { HeaderProps } from "../../components/common/Header";
+import PageContainer from "../../components/common/Container";
+import { ApiClient } from "../../api";
+import ClassEditBase from "./base";
 
 const headerProps: HeaderProps = {
   role: "生徒",
