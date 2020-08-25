@@ -20,6 +20,7 @@ const App: FC = () => (
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />
+        <Route path="/student/class" component={ClassPage} />
         <Route exact path="/teacher" component={TeacherHomePage} />
         <Route
           path="/student/class/:passphrase"
