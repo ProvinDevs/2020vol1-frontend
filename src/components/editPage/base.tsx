@@ -12,7 +12,7 @@ export interface classEditState {
   hasData: boolean;
   hasError: boolean;
   deletingFile?: FileID;
-  data: Class | undefined;
+  data?: Class;
 }
 
 const ClassEditBase = (props: Props): JSX.Element => {
@@ -22,9 +22,11 @@ const ClassEditBase = (props: Props): JSX.Element => {
     deletingFile: undefined,
     data: undefined,
   });
+
   if (state.hasError) {
     return <h1>Error occured...</h1>;
   }
+
   if (!state.hasData) {
     props.client.getClassById(props.id as ClassID).then((foundClass) => {
       const hasError = foundClass == null;
@@ -35,6 +37,7 @@ const ClassEditBase = (props: Props): JSX.Element => {
         data: foundClass,
       });
     });
+
     return <h1>Loading...</h1>;
   }
 
