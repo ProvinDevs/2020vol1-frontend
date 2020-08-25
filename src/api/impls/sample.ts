@@ -131,6 +131,7 @@ export class SampleApiClient implements ApiClient {
   }
 
   async deleteFile(fileId: FileID): Promise<File> {
+    /*
     const elm = this.inner.find((x) => x.files.find((y) => y.id === fileId) != null);
 
     if (elm == null) {
@@ -142,7 +143,8 @@ export class SampleApiClient implements ApiClient {
     const file = elm.files.find((x) => x.id == fileId)!;
     // eslint-disable-next-line
     (elm as any)._files = elm.files.filter((x) => x.id !== fileId);
+    */
 
-    return file;
+    return (undefined as unknown) as File;
   }
 }
