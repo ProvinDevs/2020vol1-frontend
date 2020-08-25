@@ -19,4 +19,5 @@ declare module "*.scss" {
 }
 
 declare let THREE;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let THREEx: any;
