@@ -1,8 +1,14 @@
 import React, { FC, useEffect } from "react";
+import { getMarker } from "../markers";
+import { File } from "../api";
 
 import styles from "../scss/components/ar.scss";
 
-const AR: FC = () => {
+type Props = {
+  files: Array<File>;
+};
+
+const AR: FC<Props> = ({ files }) => {
   let renderer: THREE.WebGLRenderer;
   let scene: THREE.Scene;
   let camera: THREE.Camera;
@@ -30,11 +36,13 @@ const AR: FC = () => {
   };
 
   const init = (wrapper: HTMLDivElement) => {
+    const { innerWidth, innerHeight } = window;
     renderer = new THREE.WebGLRenderer({
       alpha: true,
       antialias: true,
     });
     renderer.setClearColor(new THREE.Color(), 0);
+    renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.domElement.style.position = "absolute";
     renderer.domElement.style.top = "0";
@@ -47,6 +55,10 @@ const AR: FC = () => {
 
     arToolkitSource = new THREEx.ArToolkitSource({
       sourceType: "webcam",
+      sourceWidth: innerWidth,
+      sourceHeight: innerHeight,
+      displayWidth: innerWidth,
+      displayHeight: innerHeight,
     });
 
     arToolkitContext = new THREEx.ArToolkitContext({
@@ -62,17 +74,23 @@ const AR: FC = () => {
       camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
     });
 
-    const markerRoot = new THREE.Group();
-    scene.add(markerRoot);
-    const mesh = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshNormalMaterial({ opacity: 0.5 }),
-    );
-    mesh.position.y += 0.5;
-    markerRoot.add(mesh);
-    new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
-      type: "pattern",
-      patternUrl: THREEx.ArToolkitContext.baseURL + "../data/data/patt.hiro",
+    const textureLoader = new THREE.TextureLoader();
+    // TODO: これは画像を想定しています。動画や他ファイル対応は後でやります。
+    files.map((file) => {
+      const texture = textureLoader.load(/* GCSのURL */ file.id);
+      const markerRoot = new THREE.Group();
+      scene.add(markerRoot);
+      const geometry = new THREE.PlaneGeometry(1, 1);
+      const material = new THREE.MeshPhongMaterial({ map: texture });
+      const mesh = new THREE.Mesh(geometry, material);
+      markerRoot.add(mesh);
+
+      const markerUrl = getMarker(file);
+      if (markerUrl == null) return;
+      return new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+        type: "pattern",
+        patterUrl: markerUrl,
+      });
     });
 
     animate();
