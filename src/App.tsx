@@ -19,10 +19,10 @@ const App: FC = () => (
     <PageWrapper>
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route path="/about" component={AboutPage} />
-        <Route path="/student/class" component={ClassPage} />
+        <Route exact path="/about" component={AboutPage} />
         <Route exact path="/teacher" component={TeacherHomePage} />
         <Route
+          exact
           path="/student/class/:passphrase"
           component={() => <ClassPage apiClient={apiClient} />}
         />
