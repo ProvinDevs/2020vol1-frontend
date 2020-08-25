@@ -61,8 +61,8 @@ export class Class {
     this.files.push(file);
   }
 
-  public async delete(): Promise<void> {
-    await this.api.deleteClass(this.id);
+  public async delete(): Promise<Class> {
+    return await this.api.deleteClass(this.id);
   }
 
   public async deleteFile(id: FileID): Promise<File> {
@@ -72,7 +72,7 @@ export class Class {
 
     this._files = this.files.filter((x) => x.id !== id);
 
-    return this.api.deleteFile(id);
+    return this.api.deleteFile(this.id, id);
   }
 }
 

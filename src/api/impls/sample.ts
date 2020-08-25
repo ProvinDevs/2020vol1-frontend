@@ -130,7 +130,7 @@ export class SampleApiClient implements ApiClient {
     return cloneDeep(file);
   }
 
-  async deleteFile(fileId: FileID): Promise<File> {
+  async deleteFile(_: ClassID, fileId: FileID): Promise<File> {
     const elm = this.inner.find((x) => x.files.find((y) => y.id === fileId) != null);
 
     if (elm == null) {
