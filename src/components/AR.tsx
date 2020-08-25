@@ -55,8 +55,6 @@ const AR: FC<Props> = ({ files }) => {
 
     arToolkitSource = new THREEx.ArToolkitSource({
       sourceType: "webcam",
-      sourceWidth: innerWidth,
-      sourceHeight: innerHeight,
       displayWidth: innerWidth,
       displayHeight: innerHeight,
     });
