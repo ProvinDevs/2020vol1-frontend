@@ -1,16 +1,46 @@
 import React from "react";
-import { Card, CardContent, Typography, CardActions, Button } from "@material-ui/core";
+import {
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+  CircularProgress,
+} from "@material-ui/core";
 import { File } from "../../api";
-import { classEditState } from "./base";
 
 interface Props {
+  mode: "Processing" | "Disabled" | "Clickable";
   file: File;
-  state: classEditState;
-  setState: React.Dispatch<React.SetStateAction<classEditState>>;
+  onDeleteButtonClick: () => void;
 }
 
 const FileCard = (props: Props): JSX.Element => {
   const date = props.file.resourceInfo.createdAt.format("YYYY年MM月DD日 HH:mm:ss");
+
+  const buttonElm = (() => {
+    switch (props.mode) {
+      case "Processing":
+        return <CircularProgress />;
+
+      default: {
+        const disabled = props.mode === "Disabled";
+
+        return (
+          <CardActions>
+            <Button
+              variant="outlined"
+              size="small"
+              disabled={disabled}
+              onClick={() => props.onDeleteButtonClick()}
+            >
+              削除
+            </Button>
+          </CardActions>
+        );
+      }
+    }
+  })();
 
   return (
     <Card style={{ margin: "1%" }}>
@@ -21,18 +51,7 @@ const FileCard = (props: Props): JSX.Element => {
         <Typography variant="body2" component="p">
           作成日時: {date}
         </Typography>
-        <CardActions>
-          <Button
-            size="small"
-            onClick={() => {
-              props.state.data?.deleteFile(props.file.id).then((_) => {
-                props.setState({ ...props.state });
-              });
-            }}
-          >
-            削除
-          </Button>
-        </CardActions>
+        {buttonElm}
       </CardContent>
     </Card>
   );

@@ -21,7 +21,7 @@ const ClassEditPage = (props: Props): JSX.Element => {
     <>
       <Header {...headerProps} />
       <PageContainer>
-        <ClassEditBase id={id} client={props.client} />
+        <ClassEditBase classId={id} apiClient={props.client} />
       </PageContainer>
     </>
   );
