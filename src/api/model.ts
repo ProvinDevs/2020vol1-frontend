@@ -66,7 +66,6 @@ export class Class {
   }
 
   public async deleteFile(id: FileID): Promise<File> {
-    console.log(id);
     if (!this.files.some((x) => x.id === id)) {
       throw Error("specified FileID was not found in this class locally.");
     }
