@@ -57,8 +57,8 @@ const FileCard = (props: Props): JSX.Element => {
           <Typography variant="body2" component="p">
             作成日時: {date}
           </Typography>
-          {buttonElm}
         </CardContent>
+        {buttonElm}
       </Card>
     </GridListTile>
   );

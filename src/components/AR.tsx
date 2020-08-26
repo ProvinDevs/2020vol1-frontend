@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from "react";
-import { getMarker } from "../markers";
+import { getMarkerPatternUrl } from "../markers";
 import { File } from "../api";
 
 import styles from "../scss/components/ar.scss";
@@ -55,8 +55,6 @@ const AR: FC<Props> = ({ files }) => {
 
     arToolkitSource = new THREEx.ArToolkitSource({
       sourceType: "webcam",
-      sourceWidth: innerWidth,
-      sourceHeight: innerHeight,
       displayWidth: innerWidth,
       displayHeight: innerHeight,
     });
@@ -85,7 +83,7 @@ const AR: FC<Props> = ({ files }) => {
       const mesh = new THREE.Mesh(geometry, material);
       markerRoot.add(mesh);
 
-      const markerUrl = getMarker(file);
+      const markerUrl = getMarkerPatternUrl(file);
       if (markerUrl == null) return;
       return new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
         type: "pattern",

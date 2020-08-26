@@ -1,0 +1,13 @@
+.home {
+  &Title {
+    text-align: center;
+  }
+  &Menu {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  &ContentsButton {
+    margin-top: auto;
+  }
+}
