@@ -1,11 +1,12 @@
 import React, { FC, useState, ChangeEvent } from "react";
 import { Container } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 import Header, { HeaderProps } from "../../components/common/Header";
 import PageContainer from "../../components/common/Container";
 import JoinClassForm from "../../components/JoinClassForm";
 import Dialog, { DialogProps } from "../../components/common/Dialog";
-import { ApiClient } from "../../api";
+import { ApiClient, Class } from "../../api";
 
 import styles from "../../scss/pages/student/joinClass.scss";
 
@@ -27,20 +28,28 @@ export type ClassFormProps = {
   clickJoinButton: () => void;
 };
 
+type State = {
+  passPhraseState: { noError: boolean; first: boolean };
+  passPhrase: string;
+  class?: Class;
+};
+
 const checkBlankSpace = (value: string) => /\S/g.test(value);
 
 const JoinClass: FC<JoinClassProps> = ({ api }) => {
-  const [state, setState] = useState({
+  const history = useHistory();
+
+  const [state, setState] = useState<State>({
     passPhraseState: { noError: false, first: true },
     passPhrase: "",
-    class: { className: "", id: "" },
+    class: undefined,
   });
 
   const resetState = (isFirst = false) => {
     setState({
       passPhraseState: { noError: false, first: isFirst },
       passPhrase: "",
-      class: { className: "", id: "" },
+      class: undefined,
     });
   };
 
@@ -59,7 +68,7 @@ const JoinClass: FC<JoinClassProps> = ({ api }) => {
     setState({
       ...state,
       passPhraseState: { noError: true, first: false },
-      class: { className: getClass.name, id: getClass.id },
+      class: getClass,
     });
   };
 
@@ -68,7 +77,8 @@ const JoinClass: FC<JoinClassProps> = ({ api }) => {
       resetState(true);
       return;
     }
-    window.location.href = `/student/class/${state.class.id}`;
+
+    history.replace(`/student/class/${state.class?.passPhrase}`);
   };
 
   const passPhraseState = state.passPhraseState;
@@ -80,7 +90,7 @@ const JoinClass: FC<JoinClassProps> = ({ api }) => {
   };
 
   const DialogPropsValue: DialogProps = {
-    title: `${state.class.className}に参加しますか`,
+    title: `${state.class?.name}に参加しますか`,
     agreeText: "参加",
     isOpen: state.passPhraseState.noError,
     handleClose: handleClose,
