@@ -5,7 +5,7 @@ import { File } from "../api";
 import styles from "../scss/components/ar.scss";
 
 type Props = {
-  files: Array<File>;
+  files: Array<File & { sourceUrl: string }>;
 };
 
 const AR: FC<Props> = ({ files }) => {
@@ -74,8 +74,8 @@ const AR: FC<Props> = ({ files }) => {
 
     const textureLoader = new THREE.TextureLoader();
     // TODO: これは画像を想定しています。動画や他ファイル対応は後でやります。
-    files.map((file) => {
-      const texture = textureLoader.load(/* GCSのURL */ file.id);
+    files.map(async (file) => {
+      const texture = textureLoader.load(file.sourceUrl);
       const markerRoot = new THREE.Group();
       scene.add(markerRoot);
       const geometry = new THREE.PlaneGeometry(1, 1);
