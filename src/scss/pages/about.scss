@@ -1,3 +1,17 @@
-.about {
-  color: #42b983;
+@use "../color";
+@use "sass:map";
+
+.head {
+  width: 100%;
+  height: auto;
+  text-align: center;
+  background: map.get(color.$primary, "dark");
+  .heading {
+    font-size: 2.75rem;
+    color: map.get(color.$text, "darkboard-text");
+  }
+  .subHeading {
+    font-size: 1rem;
+    color: map.get(color.$text, "darkboard-text");
+  }
 }
