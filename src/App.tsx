@@ -3,8 +3,9 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 import HomePage from "./pages/Home";
 import AboutPage from "./pages/About";
+import ClassList from "./pages/teacher/ClassList";
+import TeacherHomePage from "./pages/teacher/TeacherHome";
 import JoinClass from "./pages/student/JoinClass";
-import TeacherHomePage from "./pages/TeacherHome";
 import ClassEditPage from "./pages/ClassDetailPage";
 import ClassPage from "./pages/student/Class";
 import Footer from "./components/common/Footer";
@@ -23,6 +24,7 @@ const App: FC = () => (
         <Route exact path="/" component={HomePage} />
         <Route exact path="/about" component={AboutPage} />
         <Route exact path="/teacher" component={TeacherHomePage} />
+        <Route exact path="/teacher/classlist" render={() => <ClassList api={apiClient} />} />
         <Route path="/student/join" render={() => <JoinClass api={apiClient} />} />
         <Route
           exact
