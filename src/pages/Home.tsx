@@ -45,7 +45,7 @@ const menuContents: menuContentsType[] = [
     title: "生徒の方",
     contents: "授業コードを入力して始めましょう。",
     linkText: "始める",
-    link: "/join",
+    link: "student/join",
   },
 ];
 

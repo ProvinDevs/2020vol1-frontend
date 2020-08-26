@@ -23,7 +23,7 @@ const App: FC = () => (
         <Route exact path="/" component={HomePage} />
         <Route exact path="/about" component={AboutPage} />
         <Route exact path="/teacher" component={TeacherHomePage} />
-        <Route exact path="/join" component={() => <JoinClass api={apiClient} />} />
+        <Route path="/student/join" render={() => <JoinClass api={apiClient} />} />
         <Route
           exact
           path="/teacher/class/:id"

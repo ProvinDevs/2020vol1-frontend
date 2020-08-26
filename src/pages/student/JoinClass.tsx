@@ -33,14 +33,14 @@ const JoinClass: FC<JoinClassProps> = ({ api }) => {
   const [state, setState] = useState({
     passPhraseState: { noError: false, first: true },
     passPhrase: "",
-    className: "",
+    class: { className: "", id: "" },
   });
 
   const resetState = (isFirst = false) => {
     setState({
       passPhraseState: { noError: false, first: isFirst },
       passPhrase: "",
-      className: "",
+      class: { className: "", id: "" },
     });
   };
 
@@ -59,7 +59,7 @@ const JoinClass: FC<JoinClassProps> = ({ api }) => {
     setState({
       ...state,
       passPhraseState: { noError: true, first: false },
-      className: getClass.name,
+      class: { className: getClass.name, id: getClass.id },
     });
   };
 
@@ -68,7 +68,7 @@ const JoinClass: FC<JoinClassProps> = ({ api }) => {
       resetState(true);
       return;
     }
-    window.location.href = "/";
+    window.location.href = `/student/class/${state.class.id}`;
   };
 
   const passPhraseState = state.passPhraseState;
@@ -80,7 +80,7 @@ const JoinClass: FC<JoinClassProps> = ({ api }) => {
   };
 
   const DialogPropsValue: DialogProps = {
-    title: `${state.className}に参加しますか`,
+    title: `${state.class.className}に参加しますか`,
     agreeText: "参加",
     isOpen: state.passPhraseState.noError,
     handleClose: handleClose,
