@@ -2,6 +2,7 @@ import React, { FC } from "react";
 
 import Header, { HeaderProps } from "../components/common/Header";
 import PageContainer from "../components/common/Container";
+import { Link } from "react-router-dom";
 
 const headerProps: HeaderProps = {
   role: "生徒",
@@ -14,7 +15,7 @@ const TeacherHomePage: FC = () => (
     <PageContainer>
       <h1>教師の方!2.5次元黒板へようこそ!</h1>
       <p>
-        授業一覧は<a href="./teacher/classList">こちら</a>から
+        授業一覧は<Link to="./teacher/classList">こちら</Link>から
       </p>
     </PageContainer>
   </>
