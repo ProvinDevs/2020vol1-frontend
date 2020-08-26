@@ -1,6 +1,6 @@
 import { ApiClient, SimpleClassInfo, ClassID, Class, ArMarkerID, FileID, File } from "..";
 import moment, { Moment } from "moment";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import urljoin from "url-join";
 import joi from "joi";
 import { ResourceInfo } from "../model";
@@ -47,17 +47,20 @@ type ClassRes = {
   files: Array<FileRes>;
 };
 
-function parseAxiosResponse<T>(response: AxiosResponse, schema: joi.Schema): T | undefined {
-  if (response.status == 404) {
+async function parseAxiosResponse<T>(
+  call: () => Promise<AxiosResponse>,
+  schema: joi.Schema,
+): Promise<T | undefined> {
+  let response;
+
+  try {
+    response = await call();
+  } catch (e) {
+    console.error(`api request failed: ${e}`);
     return undefined;
   }
 
-  if (response.status != 200) {
-    throw new Error(`status code was not ok: ${response.status}`);
-  }
-
   joi.assert(response.data, schema);
-
   return response.data;
 }
 
@@ -88,7 +91,7 @@ export default class BackendApiClient implements ApiClient {
 
   async getAllClassInfo(): Promise<Array<SimpleClassInfo>> {
     const url = urljoin(this.apiUrl, "classes");
-    const response = parseAxiosResponse(await axios.get(url), simpleClassInfoSchema);
+    const response = await parseAxiosResponse(() => axios.get(url), simpleClassInfoSchema);
 
     return response as Array<SimpleClassInfo>;
   }
@@ -96,19 +99,19 @@ export default class BackendApiClient implements ApiClient {
   async getClassById(id: ClassID): Promise<Class | undefined> {
     const url = urljoin(this.apiUrl, "classes", id);
 
-    return parseAxiosResponse(await axios.get(url), classSchema);
+    return parseAxiosResponse(() => axios.get(url), classSchema);
   }
 
   async getClassByPassphrase(pass: string): Promise<Class | undefined> {
     const url = urljoin(this.apiUrl, "classes/by-pass/", pass);
 
-    return parseAxiosResponse(await axios.get(url), classSchema);
+    return parseAxiosResponse(() => axios.get(url), classSchema);
   }
 
   async newClass(name: string): Promise<Class> {
     const url = urljoin(this.apiUrl, "classes");
-    const axiosRes = await axios.post(url, { name });
-    const response: ClassRes | undefined = parseAxiosResponse(axiosRes, classSchema);
+    const axiosCall = () => axios.post(url, { name });
+    const response: ClassRes | undefined = await parseAxiosResponse(axiosCall, classSchema);
 
     // newClassはundefinedを返さない(404を返さない)
     const data: ClassRes = shouldNotUndefined(response);
@@ -118,8 +121,8 @@ export default class BackendApiClient implements ApiClient {
 
   async deleteClass(id: ClassID): Promise<Class> {
     const url = urljoin(this.apiUrl, "classes", id);
-    const axiosRes = await axios.delete(url);
-    const response: ClassRes | undefined = parseAxiosResponse(axiosRes, classSchema);
+    const axiosCall = () => axios.delete(url);
+    const response: ClassRes | undefined = await parseAxiosResponse(axiosCall, classSchema);
 
     if (response === undefined) {
       throw new Error("target class not found");
@@ -149,10 +152,10 @@ export default class BackendApiClient implements ApiClient {
       resourceInfo: { fileName: fileName, createdAt: createdAt.utc().unix() },
     };
 
-    const axiosRes = await axios.post(url, body);
-    const response: FileRes | undefined = parseAxiosResponse(axiosRes, fileSchema);
+    const axiosCall = () => axios.post(url, body);
+    const response: FileRes | undefined = await parseAxiosResponse(axiosCall, fileSchema);
 
-    // addNewFileはundefinedを返さない(404を返さない)
+    // addNewFileは404を返さない
     const data: FileRes = shouldNotUndefined(response);
 
     return resToFile(data);
@@ -160,8 +163,8 @@ export default class BackendApiClient implements ApiClient {
 
   async deleteFile(classId: ClassID, fileId: FileID): Promise<File> {
     const url = urljoin(this.apiUrl, "classes", classId, "files", fileId);
-    const axiosRes = await axios.delete(url);
-    const response: FileRes | undefined = parseAxiosResponse(axiosRes, fileSchema);
+    const axiosCall = () => axios.delete(url);
+    const response: FileRes | undefined = await parseAxiosResponse(axiosCall, fileSchema);
 
     if (response === undefined) {
       throw new Error("target file not found");
