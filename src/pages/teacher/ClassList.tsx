@@ -1,4 +1,5 @@
 import React, { FC, Component, ReactNode } from "react";
+import { Link } from "react-router-dom";
 import { TableBody, TableCell, TableRow, Paper, Typography } from "@material-ui/core";
 
 import { ApiClient, SimpleClassInfo } from "../../api";
@@ -89,7 +90,7 @@ type ClassCardProp = {
 };
 
 const ClassCard: FC<ClassCardProp> = (prop) => (
-  <TableRow>
+  <TableRow hover component={Link} to={`/teacher/class/${prop.info.id}`}>
     <TableCell>{prop.info.name}</TableCell>
     <TableCell>{prop.info.id}</TableCell>
     <TableCell>{prop.info.passPhrase}</TableCell>
