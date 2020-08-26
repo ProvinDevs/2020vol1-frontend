@@ -13,6 +13,7 @@ import PageWrapper from "./theme";
 import { SampleApiClient } from "./api/impls/sample";
 
 import "./scss/global.scss";
+import ClassCreatePage from "./pages/ClassCreatePage";
 
 const apiClient = new SampleApiClient();
 
@@ -30,8 +31,14 @@ const App: FC = () => (
           component={() => <ClassEditPage client={apiClient} />}
         />
         <Route
+          exact
           path="/student/class/:passphrase"
           component={() => <ClassPage apiClient={apiClient} />}
+        />
+        <Route
+          exact
+          path="/teacher/createClass"
+          component={() => <ClassCreatePage client={apiClient} />}
         />
       </Switch>
       <Footer />

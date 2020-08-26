@@ -3,6 +3,7 @@ import { ApiClient } from "../api";
 import Header, { HeaderProps } from "../components/common/Header";
 import PageContainer from "../components/common/Container";
 import { TextField, Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const headerProps: HeaderProps = {
   role: "生徒",
@@ -43,21 +44,25 @@ const ClassCreateForm = (props: Props): JSX.Element => {
           />
         </div>
         <Button
+          component={Link}
+          to="/teacher/classlist"
           disabled={state.name.trim() == ""}
           onClick={() => onFormSubmit(state.name, props.client)}
-          href="/teacher/classlist"
-        />
+        >
+          作成
+        </Button>
       </form>
     </>
   );
 };
 
 const ClassCreatePage = (props: Props): JSX.Element => {
+  console.log(props.client);
   return (
     <>
       <Header {...headerProps} />
-      <h1>授業作成</h1>
       <PageContainer>
+        <h1>授業作成</h1>
         <ClassCreateForm client={props.client} />
       </PageContainer>
     </>
