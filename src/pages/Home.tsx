@@ -33,19 +33,19 @@ const menuContents: menuContentsType[] = [
     contents:
       "ARのマーカーを黒板に貼り付けて、カメラを通して見ることで資料を映しだすことができます。",
     linkText: "詳しく見る",
-    link: "/" /* 他のページができたら */,
+    link: "/about",
   },
   {
     title: "教師の方",
     contents: "授業を作成しましょう。",
     linkText: "始める",
-    link: "/" /* 他のページができたら */,
+    link: "/teacher",
   },
   {
     title: "生徒の方",
     contents: "授業コードを入力して始めましょう。",
     linkText: "始める",
-    link: "/" /* 他のページができたら */,
+    link: "/join",
   },
 ];
 
