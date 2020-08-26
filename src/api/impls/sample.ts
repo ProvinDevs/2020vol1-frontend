@@ -1,6 +1,7 @@
 import { ApiClient, SimpleClassInfo, ClassID, Class, ArMarkerID, FileID, File } from "../";
-import { Moment } from "moment";
+import moment, { Moment } from "moment";
 import cloneDeep from "lodash/cloneDeep";
+import { ResourceInfo } from "../model";
 
 async function toHash(text: string): Promise<string> {
   const encoded = new TextEncoder().encode(text);
@@ -15,9 +16,36 @@ export class SampleApiClient implements ApiClient {
 
   constructor() {
     this.inner = [
-      new Class("理科", "thisIsRika" as ClassID, "5J2cG", [], this),
-      new Class("社会", "thisIsSyakai" as ClassID, "T4na9", [], this),
-      new Class("英語", "thisIsEigo" as ClassID, "P3vF2", [], this),
+      new Class(
+        "理科",
+        "thisIsRika" as ClassID,
+        "5J2cG",
+        [
+          new File("1" as FileID, "marker1" as ArMarkerID, new ResourceInfo("file1", moment())),
+          new File("2" as FileID, "marker2" as ArMarkerID, new ResourceInfo("file2", moment())),
+        ],
+        this,
+      ),
+      new Class(
+        "社会",
+        "thisIsSyakai" as ClassID,
+        "T4na9",
+        [
+          new File("3" as FileID, "marker1" as ArMarkerID, new ResourceInfo("file3", moment())),
+          new File("4" as FileID, "marker2" as ArMarkerID, new ResourceInfo("file4", moment())),
+        ],
+        this,
+      ),
+      new Class(
+        "英語",
+        "thisIsEigo" as ClassID,
+        "P3vF2",
+        [
+          new File("5" as FileID, "marker1" as ArMarkerID, new ResourceInfo("file5", moment())),
+          new File("6" as FileID, "marker2" as ArMarkerID, new ResourceInfo("file6", moment())),
+        ],
+        this,
+      ),
     ];
   }
 
@@ -103,6 +131,7 @@ export class SampleApiClient implements ApiClient {
   }
 
   async deleteFile(fileId: FileID): Promise<File> {
+    /*
     const elm = this.inner.find((x) => x.files.find((y) => y.id === fileId) != null);
 
     if (elm == null) {
@@ -114,7 +143,8 @@ export class SampleApiClient implements ApiClient {
     const file = elm.files.find((x) => x.id == fileId)!;
     // eslint-disable-next-line
     (elm as any)._files = elm.files.filter((x) => x.id !== fileId);
+    */
 
-    return file;
+    return (undefined as unknown) as File;
   }
 }
