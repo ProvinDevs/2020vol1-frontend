@@ -1,9 +1,9 @@
 import { ApiClient, SimpleClassInfo, ClassID, Class, ArMarkerID, FileID, File } from "..";
 import moment, { Moment } from "moment";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import urljoin from "url-join";
 import joi from "joi";
-import { create } from "lodash";
+import { ResourceInfo } from "../model";
 
 const simpleClassInfoSchema = joi.array().items(
   joi.object({
@@ -12,13 +12,6 @@ const simpleClassInfoSchema = joi.array().items(
     passPhrase: joi.string(),
   }),
 );
-
-const classSchema = joi.object({
-  name: joi.string(),
-  id: joi.string(),
-  passPhrase: joi.string(),
-  files: joi.array(),
-});
 
 const fileSchema = joi.object({
   id: joi.string(),
@@ -29,78 +22,110 @@ const fileSchema = joi.object({
   }),
 });
 
+const classSchema = joi.object({
+  name: joi.string(),
+  id: joi.string(),
+  passPhrase: joi.string(),
+  files: joi.array().items(fileSchema),
+});
+
+type ResourceInfoRes = {
+  fileName: string;
+  createdAt: number;
+};
+
+type FileRes = {
+  id: FileID;
+  markerID: ArMarkerID;
+  resourceInfo: ResourceInfoRes;
+};
+
+type ClassRes = {
+  name: string;
+  id: ClassID;
+  passPhrase: string;
+  files: Array<FileRes>;
+};
+
+function parseAxiosResponse<T>(response: AxiosResponse, schema: joi.Schema): T | undefined {
+  if (response.status == 404) {
+    return undefined;
+  }
+
+  if (response.status != 200) {
+    throw new Error(`status code was not ok: ${response.status}`);
+  }
+
+  joi.assert(response.data, schema);
+
+  return response.data;
+}
+
+function shouldNotUndefined<T>(value: T | undefined): T {
+  if (value == null) {
+    throw new Error("unexpected undefined");
+  } else {
+    return value;
+  }
+}
+
+function resToResourceInfo(res: ResourceInfoRes): ResourceInfo {
+  const time = moment.unix(res.createdAt).utc();
+  return new ResourceInfo(res.fileName, time);
+}
+
+function resToFile(res: FileRes): File {
+  return new File(res.id, res.markerID, resToResourceInfo(res.resourceInfo));
+}
+
 export default class BackendApiClient implements ApiClient {
   constructor(private apiUrl: string) {}
 
+  resToClass(res: ClassRes): Class {
+    const files = res.files.map(resToFile);
+    return new Class(res.name, res.id, res.passPhrase, files, this);
+  }
+
   async getAllClassInfo(): Promise<Array<SimpleClassInfo>> {
     const url = urljoin(this.apiUrl, "classes");
-    const response = await axios.get(url);
+    const response = parseAxiosResponse(await axios.get(url), simpleClassInfoSchema);
 
-    if (response.status != 200) {
-      throw new Error(`status code was not ok: ${response.status}`);
-    }
-
-    joi.assert(response.data, simpleClassInfoSchema);
-
-    return response.data;
+    return response as Array<SimpleClassInfo>;
   }
 
   async getClassById(id: ClassID): Promise<Class | undefined> {
     const url = urljoin(this.apiUrl, "classes", id);
-    const response = await axios.get(url);
 
-    if (response.status != 200) {
-      throw new Error(`status code was not ok: ${response.status}`);
-    }
-
-    joi.assert(response.data, classSchema);
-
-    return response.data;
+    return parseAxiosResponse(await axios.get(url), classSchema);
   }
 
   async getClassByPassphrase(pass: string): Promise<Class | undefined> {
     const url = urljoin(this.apiUrl, "classes/by-pass/", pass);
-    const response = await axios.get(url);
 
-    if (response.status != 200) {
-      throw new Error(`status code was not ok: ${response.status}`);
-    }
-
-    joi.assert(response.data, classSchema);
-
-    return response.data;
+    return parseAxiosResponse(await axios.get(url), classSchema);
   }
 
   async newClass(name: string): Promise<Class> {
     const url = urljoin(this.apiUrl, "classes");
-    const response = await axios.post(url, { name: name });
+    const axiosRes = await axios.post(url, { name });
+    const response: ClassRes | undefined = parseAxiosResponse(axiosRes, classSchema);
 
-    if (response.status != 200) {
-      throw new Error(`status code was not ok: ${response.status}`);
-    }
+    // newClassはundefinedを返さない(404を返さない)
+    const data: ClassRes = shouldNotUndefined(response);
 
-    joi.assert(response, classSchema);
-
-    return new Class(
-      response.data.name,
-      response.data.id as ClassID,
-      response.data.passPhrase,
-      response.data.files,
-      this,
-    );
+    return this.resToClass(data);
   }
 
   async deleteClass(id: ClassID): Promise<Class> {
     const url = urljoin(this.apiUrl, "classes", id);
-    const response = await axios.delete(url);
+    const axiosRes = await axios.delete(url);
+    const response: ClassRes | undefined = parseAxiosResponse(axiosRes, classSchema);
 
-    if (response.status != 200) {
-      throw new Error(`status code was not ok: ${response.status}`);
+    if (response === undefined) {
+      throw new Error("target class not found");
     }
 
-    joi.assert(response.data, classSchema);
-
-    return response.data;
+    return this.resToClass(response);
   }
 
   async renameClass(id: ClassID, newName: string): Promise<void> {
@@ -119,31 +144,29 @@ export default class BackendApiClient implements ApiClient {
     createdAt: Moment,
   ): Promise<File> {
     const url = urljoin(this.apiUrl, "classes", classId, "files");
-    const data = {
+    const body = {
       markerID: arMarkerId,
-      resourceInfo: { fileName: fileName, createdAt: createdAt.unix() },
+      resourceInfo: { fileName: fileName, createdAt: createdAt.utc().unix() },
     };
-    const response = await axios.post(url, data);
 
-    if (response.status != 200) {
-      throw new Error(`status code was not ok: ${response.status}`);
-    }
+    const axiosRes = await axios.post(url, body);
+    const response: FileRes | undefined = parseAxiosResponse(axiosRes, fileSchema);
 
-    joi.assert(response.data, fileSchema);
+    // addNewFileはundefinedを返さない(404を返さない)
+    const data: FileRes = shouldNotUndefined(response);
 
-    return response.data;
+    return resToFile(data);
   }
 
   async deleteFile(classId: ClassID, fileId: FileID): Promise<File> {
     const url = urljoin(this.apiUrl, "classes", classId, "files", fileId);
-    const response = await axios.delete(url);
+    const axiosRes = await axios.delete(url);
+    const response: FileRes | undefined = parseAxiosResponse(axiosRes, fileSchema);
 
-    if (response.status != 200) {
-      throw new Error(`status code was not ok: ${response.status}`);
+    if (response === undefined) {
+      throw new Error("target file not found");
     }
 
-    joi.assert(response.data, fileSchema);
-
-    return response.data;
+    return resToFile(response);
   }
 }
