@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { ApiClient, Class, ClassID, File, FileID } from "../../api";
 import FileCard from "./fileCard";
+import { Button, GridList } from "@material-ui/core";
+import { Add } from "@material-ui/icons";
 
 interface Props {
   apiClient: ApiClient;
@@ -107,8 +109,12 @@ export default class ClassEditBase extends Component<Props, ClassEditState> {
         return (
           <>
             <h1>{this.state.class.name}</h1>
-            <a href="./newfile">新規ファイル</a>
-            {this.state.class.files.map((f, i) => this.renderFile(f, i))}
+            <Button href="./newfile" startIcon={<Add />} color="primary">
+              新規ファイル
+            </Button>
+            <GridList spacing={4}>
+              {this.state.class.files.map((f, i) => this.renderFile(f, i))}
+            </GridList>
           </>
         );
       }

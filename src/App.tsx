@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import HomePage from "./pages/Home";
 import AboutPage from "./pages/About";
 import TeacherHomePage from "./pages/TeacherHome";
-import ClassEditPage from "./pages/ClassEditPage";
+import ClassEditPage from "./pages/ClassDetailPage";
 import ClassPage from "./pages/student/Class";
 import Footer from "./components/common/Footer";
 import PageWrapper from "./theme";
