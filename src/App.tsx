@@ -15,6 +15,7 @@ import { SampleApiClient } from "./api/impls/sample";
 import GCS from "./gcs";
 
 import "./scss/global.scss";
+import FileCreatePage from "./pages/FileCreatePage";
 import ClassCreatePage from "./pages/ClassCreatePage";
 
 const apiClient = new SampleApiClient();
@@ -41,6 +42,10 @@ const App: FC = () => (
         />
         <Route
           exact
+          path="/teacher/class/:id/newFile"
+          component={() => <FileCreatePage client={apiClient} />}
+        />
+        <Route
           path="/teacher/createClass"
           component={() => <ClassCreatePage client={apiClient} />}
         />

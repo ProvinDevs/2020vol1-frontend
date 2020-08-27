@@ -1,0 +1,31 @@
+@use "../mediaqueries";
+
+.input {
+  display: none;
+  &Label {
+    margin-bottom: 1%;
+    > * + * {
+      padding-top: 1%;
+    }
+  }
+  &Container {
+    margin-bottom: 3%;
+  }
+}
+
+.title {
+  text-align: center;
+}
+
+@include mediaqueries.pc {
+  .input {
+    &Label {
+      display: flex;
+      align-items: center;
+      > * + * {
+        padding-left: 1rem;
+        padding-top: 0;
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import {
   Card,
   CardContent,
@@ -11,6 +11,7 @@ import {
 import { File } from "../../api";
 import { Delete } from "@material-ui/icons";
 
+import { FileName, FileNameProps } from "../../components/common/FileName";
 import styles from "../../scss/pages/classEditPage/classList.scss";
 
 interface Props {
@@ -19,7 +20,7 @@ interface Props {
   onDeleteButtonClick: () => void;
 }
 
-const FileCard = (props: Props): JSX.Element => {
+const FileCard: FC<Props> = (props: Props) => {
   const date = props.file.resourceInfo.createdAt.format("YYYY年MM月DD日 HH:mm:ss");
 
   const buttonElm = (() => {
@@ -49,12 +50,16 @@ const FileCard = (props: Props): JSX.Element => {
     }
   })();
 
+  const fileName = props.file.resourceInfo.fileName;
+  const fileNameP: FileNameProps = { maxLength: 6, name: fileName };
+  const Title = FileName(fileNameP);
+
   return (
     <GridListTile className={styles.tile}>
       <Card style={{ margin: "2%" }}>
         <CardContent>
           <Typography variant="h5" component="h3">
-            {props.file.resourceInfo.fileName}
+            {Title}
           </Typography>
           <Typography variant="body2" component="p">
             作成日時: {date}
