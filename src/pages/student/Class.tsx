@@ -5,6 +5,9 @@ import { ApiClient } from "../../api";
 import GCS from "../../gcs";
 
 import AR from "../../components/AR";
+import BackButton from "../../components/common/BackButton";
+
+import styles from "../../scss/pages/student/class.scss";
 
 type Props = {
   apiClient: ApiClient;
@@ -34,7 +37,14 @@ const Class: FC<Props> = ({ apiClient, gcs }) => {
   }, [files]);
 
   if (files != null) {
-    return <AR files={files} />;
+    return (
+      <>
+        <div className={styles.back}>
+          <BackButton href="/student/join" />
+        </div>
+        <AR files={files} />
+      </>
+    );
   }
   // TODO: 読み込み中的なの出したい
   return <div />;

@@ -1,0 +1,7 @@
+@use "../../mediaqueries";
+
+@include mediaqueries.smartphone {
+  .tile {
+    flex-basis: 100%;
+  }
+}
