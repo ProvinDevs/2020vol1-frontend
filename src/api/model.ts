@@ -56,9 +56,11 @@ export class Class {
     this._name = name;
   }
 
-  public async addNewFile(arMarkerId: string, fileName: string, createdAt: Moment): Promise<void> {
+  public async addNewFile(arMarkerId: string, fileName: string, createdAt: Moment): Promise<File> {
     const file = await this.api.addNewFile(this.id, arMarkerId, fileName, createdAt);
     this.files.push(file);
+
+    return file;
   }
 
   public async delete(): Promise<Class> {
