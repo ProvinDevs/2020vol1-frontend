@@ -31,18 +31,12 @@ interface PageProps {
   client: ApiClient;
 }
 
-const fileSelectHandler = (event: ChangeEvent<HTMLInputElement>): File | undefined => {
-  const target = event.target;
-  if (target.files == null) return undefined;
-
-  return target.files[0];
-};
-
 const FileCreateBase: FC<BaseProps> = ({ id, client, createdHandler }) => {
   const [state, setState] = useState<State>({ file: undefined, name: "選択されていません" });
 
   const setFileState = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = fileSelectHandler(event);
+    if (event.target.files == null) return;
+    const file = event.target.files[0];
     let name = "選択されていません";
     if (file !== undefined) {
       const props: FileNameProps = { maxLength: 8, name: file.name };
