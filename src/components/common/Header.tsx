@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 import styles from "../../scss/components/common/header.scss";
 
 export type HeaderProps = {
-  role: string;
+  buttonText: string;
   href: string;
 };
 
-const Header: FC<HeaderProps> = ({ role, href }) => (
+const Header: FC<HeaderProps> = ({ buttonText, href }) => (
   <Toolbar className={styles.header}>
     <h2>
       <Link to="/" style={{ color: "black" }}>
@@ -17,7 +17,7 @@ const Header: FC<HeaderProps> = ({ role, href }) => (
       </Link>
     </h2>
     <Button variant="outlined" color="primary" component={Link} to={href}>
-      {role}の方
+      {buttonText}
     </Button>
   </Toolbar>
 );

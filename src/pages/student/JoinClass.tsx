@@ -11,8 +11,8 @@ import { ApiClient, Class } from "../../api";
 import styles from "../../scss/pages/student/joinClass.scss";
 
 const headerProps: HeaderProps = {
-  role: "教師",
-  href: "/about",
+  buttonText: "教師の方",
+  href: "/teacher",
 };
 
 type TextAreaElement = ChangeEvent<HTMLTextAreaElement>;

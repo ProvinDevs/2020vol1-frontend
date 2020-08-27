@@ -23,7 +23,7 @@ type menuContentsType = {
 };
 
 const headerProps: HeaderProps = {
-  role: "生徒",
+  buttonText: "About",
   href: "/about",
 };
 
