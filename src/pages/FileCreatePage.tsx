@@ -50,29 +50,24 @@ const fileSelecteHandler = (event: ChangeEvent): File | undefined => {
   return target.files[0];
 };
 
-const onFormSubmit = (
+const onFormSubmit = async (
   classID: string,
   file: File | undefined,
   client: ApiClient,
   createdHandler: () => void,
 ) => {
   if (file == null) return;
-  client.getClassById(classID as ClassID).then((currentClass) => {
-    const markerTmp = markers.concat();
-    currentClass?.files.forEach((file) => {
-      markerTmp.splice(
-        markerTmp.findIndex((element) => element === file.markerID),
-        1,
-      );
-    });
-    const markerID = markerTmp[0];
-    client.addNewFile(classID as ClassID, markerID, file.name, moment()).then(() => {
-      client.getClassById(classID as ClassID).then((classes) => {
-        console.log(classes);
-      });
-      createdHandler();
-    });
+  const currentClass = await client.getClassById(classID as ClassID);
+  const markerTmp = markers.concat();
+  currentClass?.files.forEach((file) => {
+    markerTmp.splice(
+      markerTmp.findIndex((element) => element === file.markerID),
+      1,
+    );
   });
+  const markerID = markerTmp[0];
+  await currentClass?.addNewFile(markerID, file.name, moment());
+  createdHandler();
 };
 
 const FileCreateBase: FC<BaseProps> = (props) => {
@@ -97,7 +92,7 @@ const FileCreateBase: FC<BaseProps> = (props) => {
             accept=".png,.jpg,jpeg"
             id="contained-button-file"
             className={styles.input}
-            onChange={(event) => setFileState(event)}
+            onChange={setFileState}
           />
           <label htmlFor="contained-button-file" className={styles.inputLabel}>
             <Button variant="outlined" color="primary" component="span">
