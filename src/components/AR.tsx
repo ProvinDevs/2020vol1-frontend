@@ -79,8 +79,9 @@ const AR: FC<Props> = ({ files }) => {
       const markerRoot = new THREE.Group();
       scene.add(markerRoot);
       const geometry = new THREE.PlaneGeometry(1, 1);
-      const material = new THREE.MeshPhongMaterial({ map: texture });
+      const material = new THREE.MeshBasicMaterial({ map: texture });
       const mesh = new THREE.Mesh(geometry, material);
+      mesh.rotation.x = -Math.PI / 2;
       markerRoot.add(mesh);
 
       const markerUrl = getMarkerPatternUrl(file);
