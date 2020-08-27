@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import { File } from "../../api";
+import { LinearProgress } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { ApiClient } from "../../api";
 import GCS from "../../gcs";
@@ -47,7 +48,11 @@ const Class: FC<Props> = ({ apiClient, gcs }) => {
     );
   }
   // TODO: 読み込み中的なの出したい
-  return <div />;
+  return (
+    <div>
+      <LinearProgress />
+    </div>
+  );
 };
 
 export default Class;
