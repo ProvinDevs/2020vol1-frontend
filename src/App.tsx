@@ -6,17 +6,19 @@ import AboutPage from "./pages/About";
 import ClassList from "./pages/teacher/ClassList";
 import TeacherHomePage from "./pages/teacher/TeacherHome";
 import JoinClass from "./pages/student/JoinClass";
-import ClassEditPage from "./pages/ClassDetailPage";
+import ClassEditPage from "./pages/ClassEditPage";
 import ClassPage from "./pages/student/Class";
 import Footer from "./components/common/Footer";
 import PageWrapper from "./theme";
 
 import { SampleApiClient } from "./api/impls/sample";
+import GCS from "./gcs";
 
 import "./scss/global.scss";
 import FileCreatePage from "./pages/FileCreatePage";
 
 const apiClient = new SampleApiClient();
+const gcs = new GCS();
 
 const App: FC = () => (
   <BrowserRouter>
@@ -33,8 +35,9 @@ const App: FC = () => (
           component={() => <ClassEditPage client={apiClient} />}
         />
         <Route
+          exact
           path="/student/class/:passphrase"
-          component={() => <ClassPage apiClient={apiClient} />}
+          component={() => <ClassPage apiClient={apiClient} gcs={gcs} />}
         />
         <Route
           exact

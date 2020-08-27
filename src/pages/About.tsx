@@ -9,7 +9,7 @@ import DocumentImage from "../images/document_image.png";
 import SampleImage from "../images/sample.png";
 
 const headerProps: HeaderProps = {
-  role: "生徒",
+  buttonText: "ホーム",
   href: "/",
 };
 

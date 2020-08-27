@@ -1,34 +1,28 @@
-import { Storage, Bucket } from "@google-cloud/storage";
-import { File } from "../api";
+import * as firebase from "firebase/app";
+import "firebase/storage";
 import token from "./token.json";
+import { File as ApiFile } from "../api";
 
-// ***†卍 ハードコーディング 卍†***
-const BUCKET_NAME = "provindevs-2020-files";
+const FILE_REF_NAME = "provindevs-2020-files";
 
 class GCS {
-  private bucket: Bucket;
+  private fileRef: firebase.storage.Reference;
 
-  constructor(private bucketName: string = BUCKET_NAME) {
-    this.bucket = new Storage({ credentials: token }).bucket(bucketName);
+  constructor(fileRefName: string = FILE_REF_NAME) {
+    firebase.initializeApp(token);
+    this.fileRef = firebase.storage().ref(fileRefName);
   }
 
-  public async addNewFile(file: File, fileSrc: string): Promise<void> {
-    await this.bucket.upload(fileSrc, {
-      destination: file.id,
-      gzip: true,
-    });
-    await this.bucket.file(file.id).makePublic();
+  async addNewFile(apiFile: ApiFile, file: File): Promise<void> {
+    await this.fileRef.child(apiFile.id).put(file);
   }
 
-  public async deleteFile(file: File): Promise<File> {
-    await this.bucket.file(file.id).delete();
-    return file;
+  async deleteFile(apiFile: ApiFile): Promise<void> {
+    await this.fileRef.child(apiFile.id).delete();
   }
 
-  public async getFileUrl(file: File): Promise<string | undefined> {
-    if (await this.bucket.file(file.id).exists()) {
-      return `https://storage.googleapis.com/${this.bucketName}/${file.id}`;
-    }
+  async getFileUrl(apiFile: ApiFile): Promise<string> {
+    return await this.fileRef.child(apiFile.id).getDownloadURL();
   }
 }
 

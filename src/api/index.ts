@@ -33,5 +33,5 @@ export interface ApiClient {
   /**
    * @deprecated Class.deleteFile を使おう!
    */
-  deleteFile(fileId: FileID): Promise<File>;
+  deleteFile(classId: ClassID, fileId: FileID): Promise<File>;
 }

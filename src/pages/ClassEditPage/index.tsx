@@ -7,8 +7,8 @@ import { ApiClient } from "../../api";
 import ClassEditBase from "./base";
 
 const headerProps: HeaderProps = {
-  role: "生徒",
-  href: "/about",
+  buttonText: "生徒の方",
+  href: "/student/join",
 };
 
 interface Props {

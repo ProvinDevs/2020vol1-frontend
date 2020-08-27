@@ -3,6 +3,7 @@ import { ApiClient, Class, ClassID, File, FileID } from "../../api";
 import FileCard from "./fileCard";
 import { Button, GridList } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 
 interface Props {
   apiClient: ApiClient;
@@ -109,7 +110,7 @@ export default class ClassEditBase extends Component<Props, ClassEditState> {
         return (
           <>
             <h1>{this.state.class.name}</h1>
-            <Button href={`./${this.props.classId}/newfile`} startIcon={<Add />} color="primary">
+            <Button component={Link} to={`./${this.props.classId}/newfile`} startIcon={<Add />} color="primary">
               新規ファイル
             </Button>
             <GridList spacing={4}>

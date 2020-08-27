@@ -1,6 +1,14 @@
 $sp: 834px; //breakpoint for PC and Tablet
+$phone: 500px;
+
 @mixin pc {
   @media (min-width: ($sp)) {
+    @content;
+  }
+}
+
+@mixin smartphone {
+  @media (max-width: $phone) {
     @content;
   }
 }

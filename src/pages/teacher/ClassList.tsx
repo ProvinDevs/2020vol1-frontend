@@ -1,14 +1,12 @@
 import React, { FC, Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { TableBody, TableCell, TableRow, Paper, Typography, Button } from "@material-ui/core";
-import { ArrowBack } from "@material-ui/icons";
+import { TableBody, TableCell, TableRow, Paper, Typography } from "@material-ui/core";
 
 import { ApiClient, SimpleClassInfo } from "../../api";
 import Header, { HeaderProps } from "../../components/common/Header";
 import { TableWrapper, TableHead } from "../../components/common/Table";
 import PageContainer from "../../components/common/Container";
-
-import styles from "../../scss/pages/teacher/classList.scss";
+import BackButton from "../../components/common/BackButton";
 
 export type ClassListProps = {
   api: ApiClient;
@@ -24,7 +22,7 @@ type State =
     };
 
 const headerProps: HeaderProps = {
-  role: "生徒",
+  buttonText: "生徒の方",
   href: "/about",
 };
 
@@ -76,11 +74,7 @@ export default class ClassList extends Component<ClassListProps, State> {
           <Typography gutterBottom variant="h5" component="h2" align="center">
             授業一覧
           </Typography>
-          <div className={styles.button}>
-            <Button href="/teacher" color="primary" startIcon={<ArrowBack />}>
-              戻る
-            </Button>
-          </div>
+          <BackButton href="/teacher" />
           <Paper>
             <TableWrapper>
               <TableHead columns={columns} />

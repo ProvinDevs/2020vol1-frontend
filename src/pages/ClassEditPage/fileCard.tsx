@@ -12,6 +12,7 @@ import { File } from "../../api";
 import { Delete } from "@material-ui/icons";
 
 import { FileName, FileNameProps } from "../../components/common/FileName";
+import styles from "../../scss/pages/classEditPage/classList.scss";
 
 interface Props {
   mode: "Processing" | "Disabled" | "Clickable";
@@ -54,7 +55,7 @@ const FileCard: FC<Props> = (props: Props) => {
   const Title = FileName(fileNameP);
 
   return (
-    <GridListTile>
+    <GridListTile className={styles.tile}>
       <Card style={{ margin: "2%" }}>
         <CardContent>
           <Typography variant="h5" component="h3">
