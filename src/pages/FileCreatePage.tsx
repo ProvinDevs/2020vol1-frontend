@@ -6,6 +6,7 @@ import Header, { HeaderProps } from "../components/common/Header";
 import PageContainer from "../components/common/Container";
 import { ApiClient, ClassID } from "../api";
 import { FileName, FileNameProps } from "../components/common/FileName";
+import { getUnusedMarkers } from "../markers";
 import moment from "moment";
 
 import styles from "../scss/pages/fileCreatePage.scss";
@@ -30,19 +31,6 @@ interface PageProps {
   client: ApiClient;
 }
 
-const markers = [
-  "marker01",
-  "marker02",
-  "marker03",
-  "marker04",
-  "marker05",
-  "marker06",
-  "marker07",
-  "marker08",
-  "marker09",
-  "marker10",
-];
-
 const fileSelectHandler = (event: ChangeEvent<HTMLInputElement>): File | undefined => {
   const target = event.target;
   if (target.files == null) return undefined;
@@ -66,15 +54,9 @@ const FileCreateBase: FC<BaseProps> = ({ id, client, createdHandler }) => {
   const onFormSubmit = async () => {
     if (state.file == null) return;
     const currentClass = await client.getClassById(id as ClassID);
-    const markerTmp = markers.concat();
-    currentClass?.files.forEach((file) => {
-      markerTmp.splice(
-        markerTmp.findIndex((element) => element === file.markerID),
-        1,
-      );
-    });
-    const markerID = markerTmp[0];
-    await currentClass?.addNewFile(markerID, state.file.name, moment());
+    if (currentClass == null) return;
+    const marker = getUnusedMarkers(currentClass)[0];
+    await currentClass?.addNewFile(marker.id, state.file.name, moment());
     createdHandler();
   };
 
