@@ -2,22 +2,35 @@ import React, { FC, useState, useEffect } from "react";
 import { File } from "../../api";
 import { useParams } from "react-router-dom";
 import { ApiClient } from "../../api";
+import GCS from "../../gcs";
 
 import AR from "../../components/AR";
 
 type Props = {
   apiClient: ApiClient;
+  gcs: GCS;
 };
 
-const Class: FC<Props> = ({ apiClient }) => {
+const Class: FC<Props> = ({ apiClient, gcs }) => {
   const { passphrase } = useParams<{ passphrase: string }>();
-  const [files, setFiles] = useState<Array<File>>();
+  const [files, setFiles] = useState<Array<File & { sourceUrl: string }>>();
   useEffect(() => {
     if (files != null) return;
-    apiClient.getClassByPassphrase(passphrase).then((class_) => {
+    const getFiles = async () => {
+      const class_ = await apiClient.getClassByPassphrase(passphrase);
       if (class_ == null) return;
-      setFiles(class_.files);
-    });
+
+      const promiseArray = class_.files.map(async (file) => {
+        const sourceUrl = await gcs.getFileUrl(file);
+        return {
+          ...file,
+          sourceUrl,
+        };
+      });
+      const filesWithResource = await Promise.all(promiseArray);
+      setFiles(filesWithResource);
+    };
+    getFiles().catch(console.error);
   }, [files]);
 
   if (files != null) {

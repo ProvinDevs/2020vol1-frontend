@@ -12,10 +12,12 @@ import Footer from "./components/common/Footer";
 import PageWrapper from "./theme";
 
 import { SampleApiClient } from "./api/impls/sample";
+import GCS from "./gcs";
 
 import "./scss/global.scss";
 
 const apiClient = new SampleApiClient();
+const gcs = new GCS();
 
 const App: FC = () => (
   <BrowserRouter>
@@ -34,7 +36,7 @@ const App: FC = () => (
         <Route
           exact
           path="/student/class/:passphrase"
-          component={() => <ClassPage apiClient={apiClient} />}
+          component={() => <ClassPage apiClient={apiClient} gcs={gcs} />}
         />
       </Switch>
       <Footer />
