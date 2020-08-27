@@ -27,7 +27,7 @@ const formInputHandler = (
 };
 
 const onFormSubmit = (name: string, client: ApiClient) => {
-  client.newClass(name);
+  client.newClass(name).catch(console.error);
 };
 
 const ClassCreateForm = (props: Props): JSX.Element => {
