@@ -20,6 +20,10 @@ class GCS {
   async deleteFile(apiFile: ApiFile): Promise<void> {
     await this.fileRef.child(apiFile.id).delete();
   }
+
+  async getFileUrl(apiFile: ApiFile): Promise<string> {
+    return await this.fileRef.child(apiFile.id).getDownloadURL();
+  }
 }
 
 export default GCS;
