@@ -14,6 +14,7 @@ import PageWrapper from "./theme";
 import { SampleApiClient } from "./api/impls/sample";
 
 import "./scss/global.scss";
+import FileCreatePage from "./pages/FileCreatePage";
 
 const apiClient = new SampleApiClient();
 
@@ -34,6 +35,11 @@ const App: FC = () => (
         <Route
           path="/student/class/:passphrase"
           component={() => <ClassPage apiClient={apiClient} />}
+        />
+        <Route
+          exact
+          path="/teacher/class/:id/newFile"
+          component={() => <FileCreatePage client={apiClient} />}
         />
       </Switch>
       <Footer />

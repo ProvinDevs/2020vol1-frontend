@@ -109,7 +109,7 @@ export default class ClassEditBase extends Component<Props, ClassEditState> {
         return (
           <>
             <h1>{this.state.class.name}</h1>
-            <Button href="./newfile" startIcon={<Add />} color="primary">
+            <Button href={`./${this.props.classId}/newfile`} startIcon={<Add />} color="primary">
               新規ファイル
             </Button>
             <GridList spacing={4}>
