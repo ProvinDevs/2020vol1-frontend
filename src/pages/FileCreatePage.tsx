@@ -50,27 +50,7 @@ const fileSelectHandler = (event: ChangeEvent<HTMLInputElement>): File | undefin
   return target.files[0];
 };
 
-const onFormSubmit = async (
-  classID: string,
-  file: File | undefined,
-  client: ApiClient,
-  createdHandler: () => void,
-) => {
-  if (file == null) return;
-  const currentClass = await client.getClassById(classID as ClassID);
-  const markerTmp = markers.concat();
-  currentClass?.files.forEach((file) => {
-    markerTmp.splice(
-      markerTmp.findIndex((element) => element === file.markerID),
-      1,
-    );
-  });
-  const markerID = markerTmp[0];
-  await currentClass?.addNewFile(markerID, file.name, moment());
-  createdHandler();
-};
-
-const FileCreateBase: FC<BaseProps> = (props) => {
+const FileCreateBase: FC<BaseProps> = ({ id, client, createdHandler }) => {
   const [state, setState] = useState<State>({ file: undefined, name: "選択されていません" });
 
   const setFileState = (event: ChangeEvent<HTMLInputElement>) => {
@@ -81,6 +61,21 @@ const FileCreateBase: FC<BaseProps> = (props) => {
       name = FileName(props);
     }
     setState({ file: file, name: name });
+  };
+
+  const onFormSubmit = async () => {
+    if (state.file == null) return;
+    const currentClass = await client.getClassById(id as ClassID);
+    const markerTmp = markers.concat();
+    currentClass?.files.forEach((file) => {
+      markerTmp.splice(
+        markerTmp.findIndex((element) => element === file.markerID),
+        1,
+      );
+    });
+    const markerID = markerTmp[0];
+    await currentClass?.addNewFile(markerID, state.file.name, moment());
+    createdHandler();
   };
 
   return (
@@ -111,7 +106,7 @@ const FileCreateBase: FC<BaseProps> = (props) => {
           variant="contained"
           color="primary"
           disabled={state.file == null}
-          onClick={() => onFormSubmit(props.id, state.file, props.client, props.createdHandler)}
+          onClick={onFormSubmit}
         >
           作成
         </Button>
