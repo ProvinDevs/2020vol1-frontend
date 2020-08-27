@@ -61,7 +61,7 @@ const FileCreateBase: FC<BaseProps> = ({ id, client, createdHandler }) => {
         <div className={styles.inputContainer}>
           <input
             type="file"
-            accept=".png,.jpg,jpeg"
+            accept=".png,.jpg,.jpeg"
             id="contained-button-file"
             className={styles.input}
             onChange={setFileState}
