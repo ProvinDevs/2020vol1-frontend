@@ -22,15 +22,12 @@ const Class: FC<Props> = ({ apiClient, gcs }) => {
 
       const promiseArray = class_.files.map(async (file) => {
         const sourceUrl = await gcs.getFileUrl(file);
-        if (sourceUrl == null) return;
         return {
           ...file,
           sourceUrl,
         };
       });
-      const filesWithResource = (await Promise.all(promiseArray)).flatMap((file) =>
-        file != null ? [file] : [],
-      );
+      const filesWithResource = await Promise.all(promiseArray);
       setFiles(filesWithResource);
     };
     getFiles().catch(console.error);
