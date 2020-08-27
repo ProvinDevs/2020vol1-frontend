@@ -1,6 +1,6 @@
 import { ApiClient, SimpleClassInfo, ClassID, Class, ArMarkerID, FileID, File } from "..";
 import moment, { Moment } from "moment";
-import axios, { AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosResponse } from "axios";
 import urljoin from "url-join";
 import joi from "joi";
 import { ResourceInfo } from "../model";
@@ -47,7 +47,7 @@ type ClassRes = {
   files: Array<FileRes>;
 };
 
-async function parseAxiosResponse<T>(
+async function parseAxiosResponse<T = unknown>(
   call: () => Promise<AxiosResponse>,
   schema: joi.Schema,
 ): Promise<T | undefined> {
@@ -66,10 +66,10 @@ async function parseAxiosResponse<T>(
 
 function shouldNotUndefined<T>(value: T | undefined): T {
   if (value == null) {
-    throw new Error("unexpected undefined");
-  } else {
-    return value;
+    throw new Error("unexpected undefined, might backend error");
   }
+
+  return value;
 }
 
 function resToResourceInfo(res: ResourceInfoRes): ResourceInfo {
@@ -84,54 +84,64 @@ function resToFile(res: FileRes): File {
 export default class BackendApiClient implements ApiClient {
   constructor(private apiUrl: string) {}
 
-  resToClass(res: ClassRes): Class {
+  private resToClass(res: ClassRes): Class {
     const files = res.files.map(resToFile);
     return new Class(res.name, res.id, res.passPhrase, files, this);
   }
 
-  async getAllClassInfo(): Promise<Array<SimpleClassInfo>> {
+  public async getAllClassInfo(): Promise<Array<SimpleClassInfo>> {
     const url = urljoin(this.apiUrl, "classes");
-    const response = await parseAxiosResponse(() => axios.get(url), simpleClassInfoSchema);
+    const response = await parseAxiosResponse<Array<SimpleClassInfo>>(
+      () => axios.get(url),
+      simpleClassInfoSchema,
+    );
 
-    return response as Array<SimpleClassInfo>;
+    return shouldNotUndefined(response);
   }
 
-  async getClassById(id: ClassID): Promise<Class | undefined> {
+  public async getClassById(id: ClassID): Promise<Class | undefined> {
     const url = urljoin(this.apiUrl, "classes", id);
+    const response = await parseAxiosResponse<ClassRes>(() => axios.get(url), classSchema);
 
-    return parseAxiosResponse(() => axios.get(url), classSchema);
-  }
-
-  async getClassByPassphrase(pass: string): Promise<Class | undefined> {
-    const url = urljoin(this.apiUrl, "classes/by-pass/", pass);
-
-    return parseAxiosResponse(() => axios.get(url), classSchema);
-  }
-
-  async newClass(name: string): Promise<Class> {
-    const url = urljoin(this.apiUrl, "classes");
-    const axiosCall = () => axios.post(url, { name });
-    const response: ClassRes | undefined = await parseAxiosResponse(axiosCall, classSchema);
-
-    // newClassはundefinedを返さない(404を返さない)
-    const data: ClassRes = shouldNotUndefined(response);
-
-    return this.resToClass(data);
-  }
-
-  async deleteClass(id: ClassID): Promise<Class> {
-    const url = urljoin(this.apiUrl, "classes", id);
-    const axiosCall = () => axios.delete(url);
-    const response: ClassRes | undefined = await parseAxiosResponse(axiosCall, classSchema);
-
-    if (response === undefined) {
-      throw new Error("target class not found");
+    if (response == null) {
+      return undefined;
     }
 
     return this.resToClass(response);
   }
 
-  async renameClass(id: ClassID, newName: string): Promise<void> {
+  public async getClassByPassphrase(pass: string): Promise<Class | undefined> {
+    const url = urljoin(this.apiUrl, "classes/by-pass/", pass);
+    const response = await parseAxiosResponse<ClassRes>(() => axios.get(url), classSchema);
+
+    if (response == null) {
+      return undefined;
+    }
+
+    return this.resToClass(response);
+  }
+
+  public async newClass(name: string): Promise<Class> {
+    const url = urljoin(this.apiUrl, "classes");
+    const axiosCall = () => axios.post(url, { name });
+    const response = await parseAxiosResponse<ClassRes>(axiosCall, classSchema);
+
+    const data: ClassRes = shouldNotUndefined(response);
+
+    return this.resToClass(data);
+  }
+
+  public async deleteClass(id: ClassID): Promise<Class> {
+    const url = urljoin(this.apiUrl, "classes", id);
+    const axiosCall = () => axios.delete(url);
+    const response = await parseAxiosResponse<ClassRes>(axiosCall, classSchema);
+
+    const data = shouldNotUndefined(response);
+
+    return this.resToClass(data);
+  }
+
+  public async renameClass(id: ClassID, newName: string): Promise<void> {
     const url = urljoin(this.apiUrl, "classes", id);
     const response = await axios.put(url, { name: newName });
 
@@ -140,7 +150,7 @@ export default class BackendApiClient implements ApiClient {
     }
   }
 
-  async addNewFile(
+  public async addNewFile(
     classId: ClassID,
     arMarkerId: string,
     fileName: string,
@@ -153,18 +163,17 @@ export default class BackendApiClient implements ApiClient {
     };
 
     const axiosCall = () => axios.post(url, body);
-    const response: FileRes | undefined = await parseAxiosResponse(axiosCall, fileSchema);
+    const response = await parseAxiosResponse<FileRes>(axiosCall, fileSchema);
 
-    // addNewFileは404を返さない
-    const data: FileRes = shouldNotUndefined(response);
+    const data = shouldNotUndefined(response);
 
     return resToFile(data);
   }
 
-  async deleteFile(classId: ClassID, fileId: FileID): Promise<File> {
+  public async deleteFile(classId: ClassID, fileId: FileID): Promise<File> {
     const url = urljoin(this.apiUrl, "classes", classId, "files", fileId);
     const axiosCall = () => axios.delete(url);
-    const response: FileRes | undefined = await parseAxiosResponse(axiosCall, fileSchema);
+    const response = await parseAxiosResponse<FileRes>(axiosCall, fileSchema);
 
     if (response === undefined) {
       throw new Error("target file not found");

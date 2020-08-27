@@ -130,7 +130,8 @@ export class SampleApiClient implements ApiClient {
     return cloneDeep(file);
   }
 
-  async deleteFile(_: ClassID, __: FileID): Promise<File> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async deleteFile(_classId: ClassID, _fileId: FileID): Promise<File> {
     /*
     const elm = this.inner.find((x) => x.files.find((y) => y.id === fileId) != null);
 
