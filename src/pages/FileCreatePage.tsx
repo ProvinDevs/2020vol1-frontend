@@ -43,8 +43,8 @@ const markers = [
   "marker10",
 ];
 
-const fileSelecteHandler = (event: ChangeEvent): File | undefined => {
-  const target = event.target as HTMLInputElement;
+const fileSelectHandler = (event: ChangeEvent<HTMLInputElement>): File | undefined => {
+  const target = event.target;
   if (target.files == null) return undefined;
 
   return target.files[0];
@@ -73,8 +73,8 @@ const onFormSubmit = async (
 const FileCreateBase: FC<BaseProps> = (props) => {
   const [state, setState] = useState<State>({ file: undefined, name: "選択されていません" });
 
-  const setFileState = (event: ChangeEvent) => {
-    const file = fileSelecteHandler(event);
+  const setFileState = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = fileSelectHandler(event);
     let name = "選択されていません";
     if (file !== undefined) {
       const props: FileNameProps = { maxLength: 8, name: file.name };
