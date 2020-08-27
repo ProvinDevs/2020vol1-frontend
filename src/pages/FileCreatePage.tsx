@@ -11,7 +11,7 @@ import moment from "moment";
 import styles from "../scss/pages/fileCreatePage.scss";
 
 const headerProps: HeaderProps = {
-  role: "生徒",
+  buttonText: "生徒",
   href: "/about",
 };
 
