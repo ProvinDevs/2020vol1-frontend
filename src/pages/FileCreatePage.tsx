@@ -1,10 +1,14 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, FC, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import { Button, Typography, Container } from "@material-ui/core";
+
 import Header, { HeaderProps } from "../components/common/Header";
 import PageContainer from "../components/common/Container";
 import { ApiClient, ClassID } from "../api";
-import { Button } from "@material-ui/core";
+import { FileName, FileNameProps } from "../components/common/FileName";
 import moment from "moment";
+
+import styles from "../scss/pages/fileCreatePage.scss";
 
 const headerProps: HeaderProps = {
   role: "生徒",
@@ -13,6 +17,7 @@ const headerProps: HeaderProps = {
 
 interface State {
   file?: File;
+  name: string;
 }
 
 interface BaseProps {
@@ -70,20 +75,46 @@ const onFormSubmit = (
   });
 };
 
-const FileCreateBase = (props: BaseProps): JSX.Element => {
-  const [state, setState] = React.useState<State>({ file: undefined });
+const FileCreateBase: FC<BaseProps> = (props) => {
+  const [state, setState] = useState<State>({ file: undefined, name: "選択されていません" });
+
+  const setFileState = (event: ChangeEvent) => {
+    const file = fileSelecteHandler(event);
+    let name = "選択されていません";
+    if (file !== undefined) {
+      const props: FileNameProps = { maxLength: 8, name: file.name };
+      name = FileName(props);
+    }
+    setState({ file: file, name: name });
+  };
+
   return (
     <>
       <form>
-        <div>
-          <h4>ファイルを選択</h4>
+        <div className={styles.inputContainer}>
           <input
             type="file"
             accept=".png,.jpg,jpeg"
-            onChange={(event) => setState({ file: fileSelecteHandler(event) })}
+            id="contained-button-file"
+            className={styles.input}
+            onChange={(event) => setFileState(event)}
           />
+          <label htmlFor="contained-button-file" className={styles.inputLabel}>
+            <Button variant="outlined" color="primary" component="span">
+              ファイルを選択
+            </Button>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {state.name}
+            </Typography>
+          </label>
+          <Typography color="textSecondary" variant="body2" component="p">
+            ※ PNG・JPG・JPEG形式
+          </Typography>
         </div>
         <Button
+          fullWidth
+          variant="contained"
+          color="primary"
           disabled={state.file == null}
           onClick={() => onFormSubmit(props.id, state.file, props.client, props.createdHandler)}
         >
@@ -104,8 +135,10 @@ const FileCreatePage = (props: PageProps): JSX.Element => {
     <>
       <Header {...headerProps} />
       <PageContainer>
-        <h1>新規ファイル</h1>
-        <FileCreateBase client={props.client} id={id} createdHandler={onCreatedEvent} />
+        <Container maxWidth="xs">
+          <h1 className={styles.title}>新規ファイル</h1>
+          <FileCreateBase client={props.client} id={id} createdHandler={onCreatedEvent} />
+        </Container>
       </PageContainer>
     </>
   );
