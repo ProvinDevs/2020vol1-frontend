@@ -47,7 +47,6 @@ const Class: FC<Props> = ({ apiClient, gcs }) => {
       </>
     );
   }
-  // TODO: 読み込み中的なの出したい
   return (
     <div>
       <LinearProgress />
