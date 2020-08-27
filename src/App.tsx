@@ -6,7 +6,7 @@ import AboutPage from "./pages/About";
 import ClassList from "./pages/teacher/ClassList";
 import TeacherHomePage from "./pages/teacher/TeacherHome";
 import JoinClass from "./pages/student/JoinClass";
-import ClassEditPage from "./pages/ClassDetailPage";
+import ClassEditPage from "./pages/ClassEditPage";
 import ClassPage from "./pages/student/Class";
 import Footer from "./components/common/Footer";
 import PageWrapper from "./theme";
@@ -32,6 +32,7 @@ const App: FC = () => (
           component={() => <ClassEditPage client={apiClient} />}
         />
         <Route
+          exact
           path="/student/class/:passphrase"
           component={() => <ClassPage apiClient={apiClient} />}
         />
