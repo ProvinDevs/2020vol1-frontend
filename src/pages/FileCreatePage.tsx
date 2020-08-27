@@ -56,7 +56,7 @@ const FileCreateBase: FC<BaseProps> = ({ id, client, createdHandler }) => {
     const currentClass = await client.getClassById(id as ClassID);
     if (currentClass == null) return;
     const marker = getUnusedMarkers(currentClass)[0];
-    await currentClass?.addNewFile(marker.id, state.file.name, moment());
+    await currentClass.addNewFile(marker.id, state.file.name, moment());
     createdHandler();
   };
 
