@@ -16,6 +16,10 @@ class GCS {
   async addNewFile(apiFile: ApiFile, file: File): Promise<void> {
     await this.fileRef.child(apiFile.id).put(file);
   }
+
+  async deleteFile(apiFile: ApiFile): Promise<void> {
+    await this.fileRef.child(apiFile.id).delete();
+  }
 }
 
 export default GCS;
