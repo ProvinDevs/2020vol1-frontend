@@ -1,4 +1,4 @@
-import { File } from "../api";
+import { Class, File } from "../api";
 
 import image01 from "./images/marker01.png";
 import image02 from "./images/marker02.png";
@@ -90,4 +90,8 @@ export const getMarkerPatternUrl = (file: File): string | undefined => {
 
 export const getMarker = (file: File): MarkerData | undefined => {
   return markerList.find((markerData) => markerData.id === file.markerID);
+};
+
+export const getUnusedMarkers = (class_: Class): Array<MarkerData> => {
+  return markerList.filter((marker) => class_.files.every((file) => file.id !== marker.id));
 };
