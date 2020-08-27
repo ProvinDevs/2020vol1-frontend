@@ -74,7 +74,7 @@ const AR: FC<Props> = ({ files }) => {
 
     const textureLoader = new THREE.TextureLoader();
     // TODO: これは画像を想定しています。動画や他ファイル対応は後でやります。
-    files.map(async (file) => {
+    files.map((file) => {
       const texture = textureLoader.load(file.sourceUrl);
       const markerRoot = new THREE.Group();
       scene.add(markerRoot);
