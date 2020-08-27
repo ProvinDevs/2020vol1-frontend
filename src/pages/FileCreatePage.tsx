@@ -91,7 +91,7 @@ const FileCreateBase: FC<BaseProps> = ({ id, client, createdHandler }) => {
   );
 };
 
-const FileCreatePage = (props: PageProps): JSX.Element => {
+const FileCreatePage: FC<PageProps> = ({ client }) => {
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
   const onCreatedEvent = () => {
@@ -103,7 +103,7 @@ const FileCreatePage = (props: PageProps): JSX.Element => {
       <PageContainer>
         <Container maxWidth="xs">
           <h1 className={styles.title}>新規ファイル</h1>
-          <FileCreateBase client={props.client} id={id} createdHandler={onCreatedEvent} />
+          <FileCreateBase client={client} id={id} createdHandler={onCreatedEvent} />
         </Container>
       </PageContainer>
     </>
