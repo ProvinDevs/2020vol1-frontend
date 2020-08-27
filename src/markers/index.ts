@@ -92,6 +92,10 @@ export const getMarker = (file: File): MarkerData | undefined => {
   return markerList.find((markerData) => markerData.id === file.markerID);
 };
 
+export const getUsedMarkers = (class_: Class): Array<MarkerData> => {
+  return markerList.filter((marker) => class_.files.some((file) => file.id === marker.id));
+};
+
 export const getUnusedMarkers = (class_: Class): Array<MarkerData> => {
   return markerList.filter((marker) => class_.files.every((file) => file.id !== marker.id));
 };
