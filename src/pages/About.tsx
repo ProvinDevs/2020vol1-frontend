@@ -6,7 +6,7 @@ import Header, { HeaderProps } from "../components/common/Header";
 import { Container } from "@material-ui/core";
 import ARImage from "../images/ar_image.png";
 import DocumentImage from "../images/document_image.png";
-import SampleImage from "../images/sample.png";
+import DougaImage from "../images/douga_image.png";
 
 const headerProps: HeaderProps = {
   buttonText: "ホーム",
@@ -27,9 +27,9 @@ const About: FC = () => {
       explanation: "大きな資料を保管する必要がありません。ARマーカーは同じものを使用できます。",
     },
     {
-      title: "サンプル",
-      image: SampleImage,
-      explanation: "動画、3Dに対応するならそれをいれたいなと思っている。",
+      title: "動画に対応",
+      image: DougaImage,
+      explanation: "静止画だけでなく、動画にも対応しています。デジタルならではの特権です。",
     },
   ];
 
