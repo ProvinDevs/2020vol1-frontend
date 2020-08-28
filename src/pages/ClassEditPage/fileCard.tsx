@@ -7,12 +7,14 @@ import {
   Button,
   CircularProgress,
   GridListTile,
+  CardMedia,
 } from "@material-ui/core";
 import { File } from "../../api";
 import { Delete } from "@material-ui/icons";
 
 import { FileName, FileNameProps } from "../../components/common/FileName";
 import styles from "../../scss/pages/classEditPage/classList.scss";
+import { getMarkerImageUrl } from "../../markers";
 
 interface Props {
   mode: "Processing" | "Disabled" | "Clickable";
@@ -53,6 +55,8 @@ const FileCard: FC<Props> = (props: Props) => {
   const fileName = props.file.resourceInfo.fileName;
   const fileNameP: FileNameProps = { maxLength: 6, name: fileName };
   const Title = FileName(fileNameP);
+  const markerID = props.file.markerID;
+  const markerSrc = getMarkerImageUrl(props.file);
 
   return (
     <GridListTile className={styles.tile}>
@@ -64,7 +68,11 @@ const FileCard: FC<Props> = (props: Props) => {
           <Typography variant="body2" component="p">
             作成日時: {date}
           </Typography>
+          <Typography variant="body2" component="p">
+            マーカーID: {markerID}
+          </Typography>
         </CardContent>
+        <CardMedia image={markerSrc} title={markerID} className={styles.cardMedia} />
         {buttonElm}
       </Card>
     </GridListTile>
