@@ -8,6 +8,7 @@ import TeacherHomePage from "./pages/teacher/TeacherHome";
 import JoinClass from "./pages/student/JoinClass";
 import ClassEditPage from "./pages/ClassEditPage";
 import ClassPage from "./pages/student/Class";
+import MarkerDownloadPage from "./pages/MarkerDownload";
 import Footer from "./components/common/Footer";
 import PageWrapper from "./theme";
 
@@ -57,6 +58,7 @@ const App: FC = () => (
           path="/teacher/createClass"
           component={() => <ClassCreatePage client={apiClient} />}
         />
+        <Route path="/download" component={MarkerDownloadPage} />
         <Route component={NotFoundPage} />
       </Switch>
       <Footer />
