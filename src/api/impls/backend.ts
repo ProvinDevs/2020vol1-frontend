@@ -111,7 +111,7 @@ export default class BackendApiClient implements ApiClient {
   }
 
   public async getClassByPassphrase(pass: string): Promise<Class | undefined> {
-    const url = urljoin(this.apiUrl, "classes/by-pass/", pass);
+    const url = urljoin(this.apiUrl, "class/by-pass/", pass);
     const response = await parseAxiosResponse<ClassRes>(() => axios.get(url), classSchema);
 
     if (response == null) {
