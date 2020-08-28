@@ -18,9 +18,8 @@ import "./scss/global.scss";
 import FileCreatePage from "./pages/FileCreatePage";
 import ClassCreatePage from "./pages/ClassCreatePage";
 import NotFoundPage from "./pages/NotFound";
-import BackendApiClient from "./api/impls/backend";
 
-const apiClient = new BackendApiClient("http://localhost:3000");
+const apiClient = new SampleApiClient();
 const gcs = new GCS();
 
 const App: FC = () => (
