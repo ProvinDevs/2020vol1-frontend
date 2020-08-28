@@ -74,13 +74,19 @@ const AR: FC<Props> = ({ files }) => {
 
     const textureLoader = new THREE.TextureLoader();
     // TODO: これは画像を想定しています。動画や他ファイル対応は後でやります。
-    files.map((file) => {
-      const texture = textureLoader.load(file.sourceUrl);
+    files.map(async (file) => {
+      const texture = await textureLoader.loadAsync(file.sourceUrl);
+      const { width, height } = texture.image;
       const markerRoot = new THREE.Group();
       scene.add(markerRoot);
       const geometry = new THREE.PlaneGeometry(1, 1);
       const material = new THREE.MeshBasicMaterial({ map: texture });
       const mesh = new THREE.Mesh(geometry, material);
+      if (width > height) {
+        mesh.scale.set(width / height, 1, 1);
+      } else {
+        mesh.scale.set(1, height / width, 1);
+      }
       mesh.rotation.x = -Math.PI / 2;
       markerRoot.add(mesh);
 
