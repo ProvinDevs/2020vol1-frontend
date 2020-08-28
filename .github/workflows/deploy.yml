@@ -1,0 +1,28 @@
+name: deploy
+on:
+  workflow_run:
+    workflows:
+      - build
+    branches:
+      - master
+    types:
+      - completed
+
+jobs:
+  deploys:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-versions: 14.x
+      - run: yarn global add firebase-tools
+
+      - name: download artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: artifact
+
+      - name: deploy
+        run: firebase deploy --public artifact --token "${FIREBASE_TOKEN}"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
