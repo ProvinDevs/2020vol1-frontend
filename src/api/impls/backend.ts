@@ -73,7 +73,7 @@ function shouldNotUndefined<T>(value: T | undefined): T {
 }
 
 function resToResourceInfo(res: ResourceInfoRes): ResourceInfo {
-  const time = moment.unix(res.createdAt).utc();
+  const time = moment.utc(res.createdAt * 1000);
   return new ResourceInfo(res.fileName, time);
 }
 
@@ -111,7 +111,7 @@ export default class BackendApiClient implements ApiClient {
   }
 
   public async getClassByPassphrase(pass: string): Promise<Class | undefined> {
-    const url = urljoin(this.apiUrl, "classes/by-pass/", pass);
+    const url = urljoin(this.apiUrl, "class/by-pass/", pass);
     const response = await parseAxiosResponse<ClassRes>(() => axios.get(url), classSchema);
 
     if (response == null) {
