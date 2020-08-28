@@ -5,7 +5,9 @@ import { Button, Typography, Container } from "@material-ui/core";
 import Header, { HeaderProps } from "../components/common/Header";
 import PageContainer from "../components/common/Container";
 import { ApiClient, ClassID } from "../api";
+import GCS from "../gcs";
 import { FileName, FileNameProps } from "../components/common/FileName";
+import { getUnusedMarkers } from "../markers";
 import moment from "moment";
 
 import styles from "../scss/pages/fileCreatePage.scss";
@@ -22,59 +24,22 @@ interface State {
 
 interface BaseProps {
   client: ApiClient;
+  gcs: GCS;
   id: string;
   createdHandler: () => void;
 }
 
 interface PageProps {
   client: ApiClient;
+  gcs: GCS;
 }
 
-const markers = [
-  "marker01",
-  "marker02",
-  "marker03",
-  "marker04",
-  "marker05",
-  "marker06",
-  "marker07",
-  "marker08",
-  "marker09",
-  "marker10",
-];
-
-const fileSelecteHandler = (event: ChangeEvent): File | undefined => {
-  const target = event.target as HTMLInputElement;
-  if (target.files == null) return undefined;
-
-  return target.files[0];
-};
-
-const onFormSubmit = async (
-  classID: string,
-  file: File | undefined,
-  client: ApiClient,
-  createdHandler: () => void,
-) => {
-  if (file == null) return;
-  const currentClass = await client.getClassById(classID as ClassID);
-  const markerTmp = markers.concat();
-  currentClass?.files.forEach((file) => {
-    markerTmp.splice(
-      markerTmp.findIndex((element) => element === file.markerID),
-      1,
-    );
-  });
-  const markerID = markerTmp[0];
-  await currentClass?.addNewFile(markerID, file.name, moment());
-  createdHandler();
-};
-
-const FileCreateBase: FC<BaseProps> = (props) => {
+const FileCreateBase: FC<BaseProps> = ({ id, client, gcs, createdHandler }) => {
   const [state, setState] = useState<State>({ file: undefined, name: "選択されていません" });
 
-  const setFileState = (event: ChangeEvent) => {
-    const file = fileSelecteHandler(event);
+  const setFileState = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files == null) return;
+    const file = event.target.files[0];
     let name = "選択されていません";
     if (file !== undefined) {
       const props: FileNameProps = { maxLength: 8, name: file.name };
@@ -83,13 +48,23 @@ const FileCreateBase: FC<BaseProps> = (props) => {
     setState({ file: file, name: name });
   };
 
+  const onFormSubmit = async () => {
+    if (state.file == null) return;
+    const currentClass = await client.getClassById(id as ClassID);
+    if (currentClass == null) return;
+    const marker = getUnusedMarkers(currentClass)[0];
+    const apiFile = await currentClass.addNewFile(marker.id, state.file.name, moment());
+    await gcs.addNewFile(apiFile, state.file);
+    createdHandler();
+  };
+
   return (
     <>
       <form>
         <div className={styles.inputContainer}>
           <input
             type="file"
-            accept=".png,.jpg,jpeg"
+            accept=".png,.jpg,.jpeg"
             id="contained-button-file"
             className={styles.input}
             onChange={setFileState}
@@ -111,7 +86,7 @@ const FileCreateBase: FC<BaseProps> = (props) => {
           variant="contained"
           color="primary"
           disabled={state.file == null}
-          onClick={() => onFormSubmit(props.id, state.file, props.client, props.createdHandler)}
+          onClick={onFormSubmit}
         >
           作成
         </Button>
@@ -120,7 +95,7 @@ const FileCreateBase: FC<BaseProps> = (props) => {
   );
 };
 
-const FileCreatePage = (props: PageProps): JSX.Element => {
+const FileCreatePage: FC<PageProps> = ({ client, gcs }) => {
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
   const onCreatedEvent = () => {
@@ -132,7 +107,7 @@ const FileCreatePage = (props: PageProps): JSX.Element => {
       <PageContainer>
         <Container maxWidth="xs">
           <h1 className={styles.title}>新規ファイル</h1>
-          <FileCreateBase client={props.client} id={id} createdHandler={onCreatedEvent} />
+          <FileCreateBase client={client} gcs={gcs} id={id} createdHandler={onCreatedEvent} />
         </Container>
       </PageContainer>
     </>

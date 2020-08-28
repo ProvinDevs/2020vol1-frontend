@@ -43,7 +43,7 @@ const App: FC = () => (
         <Route
           exact
           path="/teacher/class/:id/newFile"
-          component={() => <FileCreatePage client={apiClient} />}
+          component={() => <FileCreatePage client={apiClient} gcs={gcs} />}
         />
         <Route
           path="/teacher/createClass"
