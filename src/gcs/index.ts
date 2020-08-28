@@ -14,7 +14,7 @@ class GCS {
   }
 
   async addNewFile(apiFile: ApiFile, file: File): Promise<void> {
-    await this.fileRef.child(apiFile.id).put(file);
+    await this.fileRef.child(apiFile.id).put(file).then();
   }
 
   async deleteFile(apiFile: ApiFile): Promise<void> {
