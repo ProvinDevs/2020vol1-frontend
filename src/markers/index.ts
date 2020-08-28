@@ -93,9 +93,9 @@ export const getMarker = (file: File): MarkerData | undefined => {
 };
 
 export const getUsedMarkers = (class_: Class): Array<MarkerData> => {
-  return markerList.filter((marker) => class_.files.some((file) => file.id === marker.id));
+  return markerList.filter((marker) => class_.files.some((file) => file.markerID === marker.id));
 };
 
 export const getUnusedMarkers = (class_: Class): Array<MarkerData> => {
-  return markerList.filter((marker) => class_.files.every((file) => file.id !== marker.id));
+  return markerList.filter((marker) => class_.files.every((file) => file.markerID !== marker.id));
 };
