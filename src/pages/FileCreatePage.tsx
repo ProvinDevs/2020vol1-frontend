@@ -5,6 +5,7 @@ import { Button, Typography, Container } from "@material-ui/core";
 import Header, { HeaderProps } from "../components/common/Header";
 import PageContainer from "../components/common/Container";
 import { ApiClient, ClassID } from "../api";
+import GCS from "../gcs";
 import { FileName, FileNameProps } from "../components/common/FileName";
 import { getUnusedMarkers } from "../markers";
 import moment from "moment";
@@ -23,15 +24,17 @@ interface State {
 
 interface BaseProps {
   client: ApiClient;
+  gcs: GCS;
   id: string;
   createdHandler: () => void;
 }
 
 interface PageProps {
   client: ApiClient;
+  gcs: GCS;
 }
 
-const FileCreateBase: FC<BaseProps> = ({ id, client, createdHandler }) => {
+const FileCreateBase: FC<BaseProps> = ({ id, client, gcs, createdHandler }) => {
   const [state, setState] = useState<State>({ file: undefined, name: "選択されていません" });
 
   const setFileState = (event: ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +54,8 @@ const FileCreateBase: FC<BaseProps> = ({ id, client, createdHandler }) => {
     const currentClass = await client.getClassById(id as ClassID);
     if (currentClass == null) return;
     const marker = getUnusedMarkers(currentClass)[0];
-    await currentClass.addNewFile(marker.id, state.file.name, moment());
+    const apiFile = await currentClass.addNewFile(marker.id, state.file.name, moment());
+    await gcs.addNewFile(apiFile, state.file);
     createdHandler();
   };
 
@@ -92,7 +96,7 @@ const FileCreateBase: FC<BaseProps> = ({ id, client, createdHandler }) => {
   );
 };
 
-const FileCreatePage: FC<PageProps> = ({ client }) => {
+const FileCreatePage: FC<PageProps> = ({ client, gcs }) => {
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
   const onCreatedEvent = () => {
@@ -104,7 +108,7 @@ const FileCreatePage: FC<PageProps> = ({ client }) => {
       <PageContainer>
         <Container maxWidth="xs">
           <h1 className={styles.title}>新規ファイル</h1>
-          <FileCreateBase client={client} id={id} createdHandler={onCreatedEvent} />
+          <FileCreateBase client={client} gcs={gcs} id={id} createdHandler={onCreatedEvent} />
         </Container>
       </PageContainer>
     </>
