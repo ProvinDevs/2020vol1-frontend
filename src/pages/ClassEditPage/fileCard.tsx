@@ -21,7 +21,7 @@ interface Props {
 }
 
 const FileCard: FC<Props> = (props: Props) => {
-  const date = props.file.resourceInfo.createdAt.format("YYYY年MM月DD日 HH:mm:ss");
+  const date = props.file.resourceInfo.createdAt.local().format("YYYY年MM月DD日 HH:mm:ss");
 
   const buttonElm = (() => {
     switch (props.mode) {

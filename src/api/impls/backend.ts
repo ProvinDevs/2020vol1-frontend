@@ -73,7 +73,7 @@ function shouldNotUndefined<T>(value: T | undefined): T {
 }
 
 function resToResourceInfo(res: ResourceInfoRes): ResourceInfo {
-  const time = moment.unix(res.createdAt).utc();
+  const time = moment.utc().unix(res.createdAt);
   return new ResourceInfo(res.fileName, time);
 }
 
