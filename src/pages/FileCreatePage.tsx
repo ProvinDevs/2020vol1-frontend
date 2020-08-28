@@ -17,6 +17,8 @@ const headerProps: HeaderProps = {
   href: "/about",
 };
 
+type UploadState = "working" | "no-op";
+
 interface State {
   file?: File;
   name: string;
@@ -36,6 +38,7 @@ interface PageProps {
 
 const FileCreateBase: FC<BaseProps> = ({ id, client, gcs, createdHandler }) => {
   const [state, setState] = useState<State>({ file: undefined, name: "選択されていません" });
+  const [uploadingState, setUploadingState] = useState<UploadState>("no-op");
 
   const setFileState = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files == null) return;
