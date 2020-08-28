@@ -71,8 +71,8 @@ const FileCard: FC<Props> = (props: Props) => {
           <Typography variant="body2" component="p">
             マーカーID: {markerID}
           </Typography>
-          <CardMedia image={markerSrc} title={markerID} className={styles.media} />
         </CardContent>
+        <CardMedia image={markerSrc} title={markerID} className={styles.cardMedia} />
         {buttonElm}
       </Card>
     </GridListTile>
