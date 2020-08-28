@@ -16,7 +16,7 @@ const TeacherHomePage: FC = () => (
       <Redirect to="/teacher/classlist" />
       <h1>2.5次元黒板へようこそ!</h1>
       <p>
-        授業一覧は<Link to="./teacher/classList">こちら</Link>から
+        授業一覧は<Link to="./teacher/classlist">こちら</Link>から
       </p>
     </PageContainer>
   </>
