@@ -41,7 +41,6 @@ const FileCreateBase: FC<BaseProps> = ({ id, client, gcs, createdHandler }) => {
     if (event.target.files == null) return;
     const file = event.target.files[0];
     let name = "選択されていません";
-    // TODO: ファイル名の切り落とし処理をスクリプト内でやるな
     if (file !== undefined) {
       const props: FileNameProps = { maxLength: 8, name: file.name };
       name = FileName(props);
