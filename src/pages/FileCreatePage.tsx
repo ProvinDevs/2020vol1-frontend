@@ -11,6 +11,7 @@ import { getUnusedMarkers } from "../markers";
 import moment from "moment";
 
 import styles from "../scss/pages/fileCreatePage.scss";
+import BackButton from "../components/common/BackButton";
 
 const headerProps: HeaderProps = {
   buttonText: "生徒",
@@ -123,6 +124,7 @@ const FileCreatePage: FC<PageProps> = ({ client, gcs }) => {
     <>
       <Header {...headerProps} />
       <PageContainer>
+        <BackButton history={history} />
         <Container maxWidth="xs">
           <h1 className={styles.title}>新規ファイル</h1>
           <FileCreateBase client={client} gcs={gcs} id={id} createdHandler={onCreatedEvent} />
