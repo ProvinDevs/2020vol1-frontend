@@ -1,5 +1,5 @@
 import React, { FC, Component, ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory, RouteComponentProps } from "react-router-dom";
 import { TableBody, TableCell, TableRow, Paper, Typography } from "@material-ui/core";
 
 import { ApiClient, SimpleClassInfo } from "../../api";
@@ -7,6 +7,7 @@ import Header, { HeaderProps } from "../../components/common/Header";
 import { TableWrapper, TableHead } from "../../components/common/Table";
 import PageContainer from "../../components/common/Container";
 import BackButton from "../../components/common/BackButton";
+import * as H from "history";
 
 export type ClassListProps = {
   api: ApiClient;
@@ -28,8 +29,8 @@ const headerProps: HeaderProps = {
 
 const columns = ["Name", "ID", "Pass"];
 
-export default class ClassList extends Component<ClassListProps, State> {
-  constructor(props: ClassListProps) {
+export default class ClassList extends Component<ClassListProps & RouteComponentProps, State> {
+  constructor(props: ClassListProps & RouteComponentProps) {
     super(props);
 
     this.state = {
@@ -74,7 +75,7 @@ export default class ClassList extends Component<ClassListProps, State> {
           <Typography gutterBottom variant="h5" component="h2" align="center">
             授業一覧
           </Typography>
-          <BackButton href="/teacher" />
+          <BackButton history={this.props.history} />
           <Paper>
             <TableWrapper>
               <TableHead columns={columns} />

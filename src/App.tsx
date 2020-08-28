@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, RouteComponentProps } from "react-router-dom";
 
 import HomePage from "./pages/Home";
 import AboutPage from "./pages/About";
@@ -28,7 +28,11 @@ const App: FC = () => (
         <Route exact path="/" component={HomePage} />
         <Route exact path="/about" component={AboutPage} />
         <Route exact path="/teacher" component={TeacherHomePage} />
-        <Route exact path="/teacher/classlist" render={() => <ClassList api={apiClient} />} />
+        <Route
+          exact
+          path="/teacher/classlist"
+          render={(props: RouteComponentProps) => <ClassList api={apiClient} {...props} />}
+        />
         <Route path="/student/join" render={() => <JoinClass api={apiClient} />} />
         <Route
           exact

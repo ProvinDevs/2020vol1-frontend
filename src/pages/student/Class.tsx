@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { File } from "../../api";
 import { LinearProgress } from "@material-ui/core";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { ApiClient } from "../../api";
 import GCS from "../../gcs";
 
@@ -17,6 +17,7 @@ type Props = {
 
 const Class: FC<Props> = ({ apiClient, gcs }) => {
   const { passphrase } = useParams<{ passphrase: string }>();
+  const history = useHistory();
   const [files, setFiles] = useState<Array<File & { sourceUrl: string }>>();
   useEffect(() => {
     if (files != null) return;
@@ -41,7 +42,7 @@ const Class: FC<Props> = ({ apiClient, gcs }) => {
     return (
       <>
         <div className={styles.back}>
-          <BackButton href="/student/join" />
+          <BackButton history={history} />
         </div>
         <AR files={files} />
       </>
