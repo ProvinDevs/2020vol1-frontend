@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { Button, Typography, Container } from "@material-ui/core";
+import { Button, Typography, Container, CircularProgress } from "@material-ui/core";
 
 import Header, { HeaderProps } from "../components/common/Header";
 import PageContainer from "../components/common/Container";
@@ -16,6 +16,8 @@ const headerProps: HeaderProps = {
   buttonText: "生徒",
   href: "/about",
 };
+
+type UploadState = "working" | "no-op";
 
 interface State {
   file?: File;
@@ -36,6 +38,7 @@ interface PageProps {
 
 const FileCreateBase: FC<BaseProps> = ({ id, client, gcs, createdHandler }) => {
   const [state, setState] = useState<State>({ file: undefined, name: "選択されていません" });
+  const [uploadingState, setUploadingState] = useState<UploadState>("no-op");
 
   const setFileState = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files == null) return;
@@ -48,14 +51,22 @@ const FileCreateBase: FC<BaseProps> = ({ id, client, gcs, createdHandler }) => {
     setState({ file: file, name: name });
   };
 
-  const onFormSubmit = async () => {
-    if (state.file == null) return;
-    const currentClass = await client.getClassById(id as ClassID);
-    if (currentClass == null) return;
-    const marker = getUnusedMarkers(currentClass)[0];
-    const apiFile = await currentClass.addNewFile(marker.id, state.file.name, moment());
-    await gcs.addNewFile(apiFile, state.file);
-    createdHandler();
+  const onFormSubmit = () => {
+    setUploadingState("working");
+    (async () => {
+      if (state.file == null) return;
+      const currentClass = await client.getClassById(id as ClassID);
+      if (currentClass == null) return;
+      const marker = getUnusedMarkers(currentClass)[0];
+      const apiFile = await currentClass.addNewFile(marker.id, state.file.name, moment());
+      await gcs.addNewFile(apiFile, state.file);
+      setUploadingState("no-op");
+      createdHandler();
+    })();
+  };
+
+  const disabled = (): boolean => {
+    return uploadingState === "working";
   };
 
   return (
@@ -70,7 +81,7 @@ const FileCreateBase: FC<BaseProps> = ({ id, client, gcs, createdHandler }) => {
             onChange={setFileState}
           />
           <label htmlFor="contained-button-file" className={styles.inputLabel}>
-            <Button variant="outlined" color="primary" component="span">
+            <Button disabled={disabled()} variant="outlined" color="primary" component="span">
               ファイルを選択
             </Button>
             <Typography variant="body2" color="textSecondary" component="p">
@@ -81,15 +92,22 @@ const FileCreateBase: FC<BaseProps> = ({ id, client, gcs, createdHandler }) => {
             ※ PNG・JPG・JPEG形式
           </Typography>
         </div>
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          disabled={state.file == null}
-          onClick={onFormSubmit}
-        >
-          作成
-        </Button>
+        <div className={styles.uploadWrapper}>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={state.file == null || disabled()}
+            onClick={onFormSubmit}
+          >
+            作成
+          </Button>
+          {disabled() && (
+            <div className={styles.upload}>
+              <CircularProgress size={24} />
+            </div>
+          )}
+        </div>
       </form>
     </>
   );
