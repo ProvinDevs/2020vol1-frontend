@@ -17,6 +17,7 @@ import GCS from "./gcs";
 import "./scss/global.scss";
 import FileCreatePage from "./pages/FileCreatePage";
 import ClassCreatePage from "./pages/ClassCreatePage";
+import NotFoundPage from "./pages/NotFound";
 
 const apiClient = new SampleApiClient();
 const gcs = new GCS();
@@ -53,6 +54,7 @@ const App: FC = () => (
           path="/teacher/createClass"
           component={() => <ClassCreatePage client={apiClient} />}
         />
+        <Route component={NotFoundPage} />
       </Switch>
       <Footer />
     </PageWrapper>
