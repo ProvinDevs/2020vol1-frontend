@@ -51,14 +51,18 @@ const FileCreateBase: FC<BaseProps> = ({ id, client, gcs, createdHandler }) => {
     setState({ file: file, name: name });
   };
 
-  const onFormSubmit = async () => {
-    if (state.file == null) return;
-    const currentClass = await client.getClassById(id as ClassID);
-    if (currentClass == null) return;
-    const marker = getUnusedMarkers(currentClass)[0];
-    const apiFile = await currentClass.addNewFile(marker.id, state.file.name, moment());
-    await gcs.addNewFile(apiFile, state.file);
-    createdHandler();
+  const onFormSubmit = () => {
+    setUploadingState("working");
+    (async () => {
+      if (state.file == null) return;
+      const currentClass = await client.getClassById(id as ClassID);
+      if (currentClass == null) return;
+      const marker = getUnusedMarkers(currentClass)[0];
+      const apiFile = await currentClass.addNewFile(marker.id, state.file.name, moment());
+      await gcs.addNewFile(apiFile, state.file);
+      setUploadingState("no-op");
+      createdHandler();
+    })();
   };
 
   return (
@@ -88,7 +92,7 @@ const FileCreateBase: FC<BaseProps> = ({ id, client, gcs, createdHandler }) => {
           fullWidth
           variant="contained"
           color="primary"
-          disabled={state.file == null}
+          disabled={state.file == null || uploadingState === "working"}
           onClick={onFormSubmit}
         >
           作成
