@@ -24,7 +24,6 @@ const MarkerDownloadPage = (): JSX.Element => {
       <Header {...headerProps} />
       <PageContainer>
         <h1>マーカーのダウンロード</h1>
-        <h3>画像をクリックすることでダウンロードできます。</h3>
         <Container maxWidth="md">
           <GridList cellHeight={300} cols={3}>
             {markerList.map((marker, index) => (

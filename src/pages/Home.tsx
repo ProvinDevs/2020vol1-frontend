@@ -47,6 +47,12 @@ const menuContents: menuContentsType[] = [
     linkText: "始める",
     link: "/student/join",
   },
+  {
+    title: "マーカーの入手",
+    contents: "ここから必要なマーカーをダウンロードできます。",
+    linkText: "ダウンロード",
+    link: "/download",
+  },
 ];
 
 const HomeCard: FC<menuContentsType> = (menu) => (
