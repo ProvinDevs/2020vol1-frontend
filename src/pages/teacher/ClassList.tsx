@@ -1,6 +1,6 @@
 import React, { FC, Component, ReactNode } from "react";
 import { Link, useHistory, RouteComponentProps } from "react-router-dom";
-import { TableBody, TableCell, TableRow, Paper, Typography } from "@material-ui/core";
+import { TableBody, TableCell, TableRow, Paper, Typography, Button } from "@material-ui/core";
 
 import { ApiClient, SimpleClassInfo } from "../../api";
 import Header, { HeaderProps } from "../../components/common/Header";
@@ -8,6 +8,7 @@ import { TableWrapper, TableHead } from "../../components/common/Table";
 import PageContainer from "../../components/common/Container";
 import BackButton from "../../components/common/BackButton";
 import * as H from "history";
+import { Add } from "@material-ui/icons";
 
 export type ClassListProps = {
   api: ApiClient;
@@ -76,6 +77,9 @@ export default class ClassList extends Component<ClassListProps & RouteComponent
             授業一覧
           </Typography>
           <BackButton history={this.props.history} />
+          <Button component={Link} to="/teacher/createclass" startIcon={<Add />} color="primary">
+            新規授業作成
+          </Button>
           <Paper>
             <TableWrapper>
               <TableHead columns={columns} />
