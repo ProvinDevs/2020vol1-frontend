@@ -27,7 +27,7 @@ type MarkerData = {
   patternSrc: string;
 };
 
-const markerList: Array<MarkerData> = [
+export const markerList: Array<MarkerData> = [
   {
     id: "marker01",
     imageSrc: image01,
