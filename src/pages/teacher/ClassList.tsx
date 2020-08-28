@@ -74,7 +74,7 @@ export default class ClassList extends Component<ClassListProps, State> {
           <Typography gutterBottom variant="h5" component="h2" align="center">
             授業一覧
           </Typography>
-          <BackButton href="/home" />
+          <BackButton href="/" />
           <Paper>
             <TableWrapper>
               <TableHead columns={columns} />
