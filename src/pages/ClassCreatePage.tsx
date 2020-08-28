@@ -1,10 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { TextField, Button, Container } from "@material-ui/core";
 
 import { ApiClient } from "../api";
 import Header, { HeaderProps } from "../components/common/Header";
 import PageContainer from "../components/common/Container";
+
+import * as H from "history";
 
 const headerProps: HeaderProps = {
   buttonText: "生徒",
@@ -13,6 +15,11 @@ const headerProps: HeaderProps = {
 
 interface Props {
   client: ApiClient;
+}
+
+interface FormProps {
+  client: ApiClient;
+  history: H.History;
 }
 
 interface FormState {
@@ -26,11 +33,12 @@ const formInputHandler = (
   setState({ name });
 };
 
-const onFormSubmit = (name: string, client: ApiClient) => {
-  client.newClass(name).catch(console.error);
+const onFormSubmit = async (name: string, client: ApiClient, history: H.History) => {
+  await client.newClass(name);
+  history.goBack();
 };
 
-const ClassCreateForm = (props: Props): JSX.Element => {
+const ClassCreateForm = (props: FormProps): JSX.Element => {
   const [state, setState] = React.useState<FormState>({ name: "" });
 
   return (
@@ -49,10 +57,8 @@ const ClassCreateForm = (props: Props): JSX.Element => {
         size="large"
         color="primary"
         variant="contained"
-        component={Link}
-        to="/teacher/classlist"
         disabled={state.name.trim() == ""}
-        onClick={() => onFormSubmit(state.name, props.client)}
+        onClick={() => onFormSubmit(state.name, props.client, props.history)}
       >
         作成
       </Button>
@@ -62,13 +68,14 @@ const ClassCreateForm = (props: Props): JSX.Element => {
 
 const ClassCreatePage = (props: Props): JSX.Element => {
   console.log(props.client);
+  const history = useHistory();
   return (
     <>
       <Header {...headerProps} />
       <PageContainer>
         <Container maxWidth="xs">
           <h1>授業作成</h1>
-          <ClassCreateForm client={props.client} />
+          <ClassCreateForm client={props.client} history={history} />
         </Container>
       </PageContainer>
     </>
