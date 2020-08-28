@@ -42,6 +42,8 @@ jobs:
 
       - name: build
         run: yarn build
+        env:
+          API_URL: ${{ secrets.API_URL }}
 
       - name: upload artifact
         uses: actions/upload-artifact@v1
