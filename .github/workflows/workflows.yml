@@ -54,7 +54,8 @@ jobs:
     needs:
       - eslint
       - build
-    if: github.ref == 'refs/heads/master'
+    # TODO: テスト用
+    #if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/setup-node@v1
         with:
