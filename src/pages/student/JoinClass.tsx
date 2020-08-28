@@ -9,6 +9,7 @@ import Dialog, { DialogProps } from "../../components/common/Dialog";
 import { ApiClient, Class } from "../../api";
 
 import styles from "../../scss/pages/student/joinClass.scss";
+import BackButton from "../../components/common/BackButton";
 
 const headerProps: HeaderProps = {
   buttonText: "教師の方",
@@ -100,6 +101,9 @@ const JoinClass: FC<JoinClassProps> = ({ api }) => {
     <>
       <Header {...headerProps} />
       <PageContainer>
+        <div className={styles.back}>
+          <BackButton history={history} />
+        </div>
         <Container maxWidth="xs" className={styles.joinForm}>
           <h1>授業に参加する</h1>
           <JoinClassForm {...classFormPropsValue} />
