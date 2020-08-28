@@ -50,7 +50,7 @@ const menuContents: menuContentsType[] = [
   {
     title: "マーカーの入手",
     contents: "ここから必要なマーカーをダウンロードできます。",
-    linkText: "ダウンロード",
+    linkText: "見に行く",
     link: "/download",
   },
 ];

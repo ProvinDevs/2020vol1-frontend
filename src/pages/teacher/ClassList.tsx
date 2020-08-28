@@ -24,7 +24,7 @@ type State =
 
 const headerProps: HeaderProps = {
   buttonText: "生徒の方",
-  href: "/about",
+  href: "/student/join",
 };
 
 const columns = ["Name", "ID", "Pass"];
