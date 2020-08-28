@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import Header, { HeaderProps } from "../../components/common/Header";
 import PageContainer from "../../components/common/Container";
@@ -13,9 +13,10 @@ const TeacherHomePage: FC = () => (
   <>
     <Header {...headerProps} />
     <PageContainer>
+      <Redirect to="/teacher/classlist" />
       <h1>2.5次元黒板へようこそ!</h1>
       <p>
-        授業一覧は<Link to="./teacher/classList">こちら</Link>から
+        授業一覧は<Link to="./teacher/classlist">こちら</Link>から
       </p>
     </PageContainer>
   </>
