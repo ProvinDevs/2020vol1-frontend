@@ -46,7 +46,7 @@ jobs:
       - name: upload artifact
         uses: actions/upload-artifact@v1
         with:
-          name: artifact
+          name: dist
           path: dist
 
   deploys:
@@ -57,10 +57,12 @@ jobs:
     # TODO: テスト用
     #if: github.ref == 'refs/heads/master'
     steps:
+      - uses: actions/checkout@v2
+
       - name: download artifact
         uses: actions/download-artifact@v1
         with:
-          name: artifact
+          name: dist
 
       - name: deploy
         uses: w9jds/firebase-action@master
