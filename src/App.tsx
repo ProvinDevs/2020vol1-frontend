@@ -13,13 +13,17 @@ import Footer from "./components/common/Footer";
 import PageWrapper from "./theme";
 
 import { SampleApiClient } from "./api/impls/sample";
+import BackendApiClient from "./api/impls/backend";
 import GCS from "./gcs";
 
 import "./scss/global.scss";
 import FileCreatePage from "./pages/FileCreatePage";
 import ClassCreatePage from "./pages/ClassCreatePage";
+import NotFoundPage from "./pages/NotFound";
 
-const apiClient = new SampleApiClient();
+const apiClient = process.env.API_URL
+  ? new BackendApiClient(process.env.API_URL)
+  : new SampleApiClient();
 const gcs = new GCS();
 
 const App: FC = () => (
@@ -55,6 +59,7 @@ const App: FC = () => (
           component={() => <ClassCreatePage client={apiClient} />}
         />
         <Route path="/download" component={MarkerDownloadPage} />
+        <Route component={NotFoundPage} />
       </Switch>
       <Footer />
     </PageWrapper>
