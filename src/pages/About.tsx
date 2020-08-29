@@ -27,9 +27,9 @@ const About: FC = () => {
       explanation: "大きな資料を保管する必要がありません。ARマーカーは同じものを使用できます。",
     },
     {
-      title: "動画に対応",
+      title: "デジタル表示",
       image: DougaImage,
-      explanation: "静止画だけでなく、動画にも対応しています。デジタルならではの特権です。",
+      explanation: "モバイル端末で表示する、デジタルならではの表示ができます。",
     },
   ];
 
