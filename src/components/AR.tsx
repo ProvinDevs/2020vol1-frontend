@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { getMarkerPatternUrl } from "../markers";
 import { File } from "../api";
 
@@ -17,6 +17,8 @@ const AR: FC<Props> = ({ files }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let arToolkitContext: any;
 
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+
   const onResize = () => {
     const { innerWidth, innerHeight } = window;
     renderer.setSize(innerWidth, innerHeight);
@@ -28,7 +30,7 @@ const AR: FC<Props> = ({ files }) => {
   };
 
   const animate = () => {
-    requestAnimationFrame(animate);
+    if (isMounted) requestAnimationFrame(animate);
     if (arToolkitSource.ready !== false) {
       arToolkitContext.update(arToolkitSource.domElement);
     }
@@ -36,6 +38,7 @@ const AR: FC<Props> = ({ files }) => {
   };
 
   const init = (wrapper: HTMLDivElement) => {
+    if (wrapper == null) return;
     const { innerWidth, innerHeight } = window;
     renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -105,6 +108,11 @@ const AR: FC<Props> = ({ files }) => {
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+  }, [isMounted]);
 
   return <div className={styles.ar} ref={init} />;
 };
